@@ -92,17 +92,14 @@ public class ConsumerServlet extends javax.servlet.http.HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		if ("true".equals(req.getParameter("is_return"))) {
-System.out.println("^^^^^^^^^^^^^^^^^^^^^ is return");
 			processReturn(req, resp);
 		} else {
 			String identifier = req.getParameter("openid_identifier");
 			if (identifier != null) {
 				this.authRequest(identifier, req, resp);
-System.out.println("^^^^^^^^^^^^^^^^^^^^^ going to authenticate");
 			} else {
 				this.getServletContext().getRequestDispatcher("/index.jsp")
 						.forward(req, resp);
-System.out.println("^^^^^^^^^^^^^^^^^^^^^ 3rd");
 			}
 		}
 	}
@@ -200,11 +197,10 @@ System.out.println("^^^^^^^^^^^^^^^^^^^^^ 3rd");
 				authReq.addExtension(sregReq);
 			}
 
-String key = getServletConfig().getInitParameter("key");
-
-authReq.set("openid.oauth.consumer", key);
-authReq.set("openid.ns.oauth", "http://specs.openid.net/extensions/oauth/1.0");
-
+			// These next 3 lines added by Kiam Choo, MySpace.  NOT a contribution to openid4java.
+			String key = getServletConfig().getInitParameter("key");
+			authReq.set("openid.oauth.consumer", key);
+			authReq.set("openid.ns.oauth", "http://specs.openid.net/extensions/oauth/1.0");
 
 			if (!discovered.isVersion2()) {
 				// Option 1: GET HTTP-redirect to the OpenID Provider endpoint
@@ -224,7 +220,7 @@ authReq.set("openid.ns.oauth", "http://specs.openid.net/extensions/oauth/1.0");
 				dispatcher.forward(httpReq, httpResp);
 			}
 		} catch (OpenIDException e) {
-e.printStackTrace();
+			e.printStackTrace();
 			// present error to the user
 		}
 
