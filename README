@@ -18,6 +18,13 @@ entire package, it is available at http://code.google.com/p/openid4java/.
 
 ----------------------
 
+Recommended way of using MySpaceID
+
+Get the samples in the sample directory working.  Then customize the code 
+there to fit your needs.
+
+----------------------
+
 Package contents:
 
 build.xml - Ant build configuration
@@ -33,4 +40,8 @@ lib/ - Jar libraries needed
 
 sample/ - Sample apps demonstrating OAuth and OpenID-OAuth hybrid.  
 
-src/ - Source code
+src/ - Source code.  The sample consumer servlet 
+       org/openid4java/samples/consumer-servlet/ConsumerServlet.java has 
+       been adapated and is used by the OpenID-OAuth hybrid sample.
+
+
