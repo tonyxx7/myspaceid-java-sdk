@@ -35,27 +35,46 @@ public class MySpace
 	protected OAuthConsumer consumer;
 	protected OAuthToken accessToken;
 	protected OAuthServer server; // This is not set directly by the developer.  Represents the MySpace server viewed as an OAuthServer.
+	protected int appType; // One of the values in ApplicationType class
 
     /**
-	 * Constructor.  Use to construct an initial MySpace object for obtaining the request token and to obtain the authorization URL.
+	 * Constructor.  Use this to construct a MySpace object for onsite applications (application type = ApplicationType.OFF_SITE).
 	 * @param consumerKey Consumer key to use.  You should have obtained the consumer key and consumer secret from developer.myspace.com.
 	 * @param consumerSecret Consumer secret to use.
 	 */
     public MySpace(String consumerKey, String consumerSecret) {
+		appType = ApplicationType.OFF_SITE;
 		consumer = new OAuthConsumer(consumerKey, consumerSecret);
 		server = new OAuthServer(consumer);
 	}
 
     /**
-	 * Mature constructor that accepts access token key and secret.  Use to construct a mature MySpace object that includes the access token key and secret.  Such a "mature" MySpace 
-	 * object can be used to obtain the access token and user data.
+	 * Constructor.  Use this to construct a MySpace object for 2 scenarios:
+	 * <ul>
+	 * <li> For offsite apps, use this to construcut the initial MySpace object for obtaining the request token and to obtain the authorization URL that you would use to authenticate the user.
+	 * <li> For onsite apps, use this to construct the MySpace object that you can use immediately to obtain user data without needing to go through user authentication.
+	 * </ul>
 	 * @param consumerKey Consumer key to use.  You should have obtained the consumer key and consumer secret from developer.myspace.com.
 	 * @param consumerSecret Consumer secret to use.
+	 * @param applicationType ApplicationType.ON_SITE for apps that run within MySpace, and ApplicationType.OFF_SITE for apps that run outside MySpace.  See {@link ApplicationType}.
+	 */
+    public MySpace(String consumerKey, String consumerSecret, int applicationType) {
+		appType = applicationType;
+		consumer = new OAuthConsumer(consumerKey, consumerSecret);
+		server = new OAuthServer(consumer);
+	}
+	
+    /**
+	 * Mature constructor that accepts access token key and secret.  Use to construct a mature offsite MySpace object that includes the access token key and secret.  Such a "mature" MySpace 
+	 * object can be used to obtain the access token and user data for offsite applications.  This constructor automatically assumes a value of ApplicationType.OFF_SITE for the application type.
+	 * @param consumerKey Consumer key to use.  You should have obtained the consumer key and consumer secret from developer.myspace.com.
+	 * @param consumerSecret Consumer secret to use.
+	 * @param applicationType ApplicationType.ON_SITE for apps that run within MySpace, and ApplicationType.OFF_SITE for apps that run outside MySpace.  See {@link ApplicationType}.
 	 * @param accessTokenKey Key of access token.
 	 * @param accessTokenSecret Secret of access token.
 	 */
-	public MySpace(String consumerKey, String consumerSecret, String accessTokenKey, String accessTokenSecret) {
-		this(consumerKey, consumerSecret);
+	public MySpace(String consumerKey, String consumerSecret, int applicationType, String accessTokenKey, String accessTokenSecret) {
+		this(consumerKey, consumerSecret, ApplicationType.OFF_SITE);
 		accessToken = new OAuthToken(accessTokenKey, accessTokenSecret);
 		server.setAccessToken(accessToken);
 	}
@@ -444,8 +463,13 @@ public class MySpace
 	 * Checks that an access token has been set up (done by using the constructor with 4 arguments).  Throws an exception if not.
 	 */
 	private void requireAccessToken() {
-		if (accessToken == null) {
-			throw new MySpaceException("Access token not set.  After obtaining the access token, use the constructor that has parameters for access token key and secret.", MySpaceException.TOKEN_REQUIRED);
+		if (appType == ApplicationType.OFF_SITE && accessToken == null) {
+			StringBuffer sb = new StringBuffer();
+			sb.append("Access token not set.  ");
+			sb.append("You are using a MySpace object with applicationType = ApplicationType.OFF_SITE, which requires an access token for data access.  ");
+			sb.append("After obtaining the access token, use the constructor that has parameters for access token key and secret.");
+			sb.append("If you are running an onsite application, use a MySpace object with applicationType set to ApplicationType.ON_SITE.  ");
+			throw new MySpaceException(sb.toString(), MySpaceException.TOKEN_REQUIRED);
 		}
 	}
 
@@ -454,160 +478,5 @@ public class MySpace
 	 * @param args Arguments passed in.
 	 */
 	public static void main(String[] args) throws Exception {
-		if (args.length > 0) {
-			String consumerKey = args[0];
-			String tokenKey = args[1];
-			String baseString = args[2];
-
-			String combinedKey = consumerKey + "&" + tokenKey;
-
-			System.out.println("Using consumerKey = " + consumerKey);
-			System.out.println("Using tokenKey = " + tokenKey);
-			System.out.println("Using baseString = " + baseString);
-			System.out.println("Using combinedKey = " + combinedKey);
-
-//			System.out.println(getHMACSHA1(combinedKey, baseString));
-			return;
-		}
-		
-		// Account that works with this test: kiammyspace/myspace888
-/*
-		String key = "77f44916a5144c97ad1ddc9ec53338cc";
-		String secret = "51951d1f872c454d8932cd5f135623ae";
-
-		MySpace ms = new MySpace(key, secret);
-		OAuthToken token = ms.getRequestToken();
-		System.out.println(token);
-
-		String str = ms.getAuthorizationURL(token, "http://testcallback");
-		System.out.println("\nAuthorization URL (copy and access this URL using a browser and log in): \n" + str);
-
-		System.out.print("\nEnter the new request token key from the callback: ");
-		InputStreamReader isr = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader(isr);
-		String newTokenKey = br.readLine();
-		System.out.println();
-//		System.out.println("Using new token: " + newTokenKey);
-
-		// To get access token, use the new request token returned in the Callback URL, and use the secret returned with the original request token
-		OAuthToken token2 = new OAuthToken(newTokenKey, token.getSecret());
-		OAuthToken token3 = ms.getAccessToken(token2);
-
-		MySpace ms2 = new MySpace(key, secret, token3.getKey(), token3.getSecret());
-		String id = ms2.getUserId();
-		System.out.println(">>> User id = " + id);
-
-		// Run tests
-		JSONObject data = null;
-		JSONObject obj = null;
-
-		// getAlbums(userId) 
-		//  - test with valid id
-		//  - test invalid id
-
-		// First test with valid id
-		data = ms2.getAlbums(id);
-		System.out.println("getAlbums() 1: " + data);
-		obj = (JSONObject) data.get("user");
-//		System.out.println(obj.getClass().getName());
-//		UserData u = data.get("user");
-		System.out.println(">>> User = " + obj.get("name"));
-
-		// 2nd test with invalid id
-		try
-		{
-			data = ms2.getAlbums("100");
-		}
-		catch (MySpaceException e)
-		{
-			System.out.println("Exception occurred with getAlbums() 2nd test");
-		}
-
-		// 3rd test with invalid id
-		try
-		{
-			data = ms2.getAlbums("-1");
-		}
-		catch (MySpaceException e)
-		{
-			System.out.println("Exception occurred with getAlbums() 3rd test");
-		}
-
-*/
-
-		// Test cases
-		// getAlbums(userId, page, pageSize)
-		//  - test with valid id, -1 for both page and pageSize
-		//  - test with valid id, page and pageSize
-		//  - test with valid id, invalid page, valid pageSize
-		//  - test with valid id, invalid page, invalid pageSize
-		//  - test with invalid id, valid page and pageSize
-		// getAlbum(userId, albumId)
-		//  - test with valid user id, valid album id
-		//  - test with valid user id, invalid album id
-		//  - test with invalid user id, valid album id
-		// getFriends(userId)
-		//  - test with valid id
-		//  - test with invalid id
-		// getFriends(userId, page, pageSize, list, show)
-		//  - test with valid id, page, pageSize, list = top, show = mood
-		//  - test with valid id, page, pageSize, list = top, show = mood|status
-		//  - test with valid id, page, pageSize, list = top, show = mood|status|online
-		//  - test with valid id, page, pageSize, list = top, show = mood | status  |online
-		//  - test with valid id, page, pageSize, list = online, show = status
-		//  - test with valid id, page, pageSize, list = app, show = status
-		// getFriendship(userId, friendIds)
-		//  - test with valid id, valid friend id
-		//  - test with valid id, invalid friend id
-		//  - test with invalid id, valid friend id
-		//  - test with invalid id, invalid friend id
-		// getMood(userId) 
-		//  - test with valid id
-		//  - test invalid id
-		// getPhotos(userId, page, pageSize)
-		//  - test with valid id, -1 for both page and pageSize
-		//  - test with valid id, page and pageSize
-		//  - test with valid id, invalid page, valid pageSize
-		//  - test with valid id, invalid page, invalid pageSize
-		//  - test with invalid id, valid page and pageSize
-		// getPhoto(userId, photoId)
-		//  - test with valid user id, valid photo id
-		//  - test with valid user id, invalid photo id
-		//  - test with invalid user id, valid photo id
-		// getProfile(userId) 
-		//  - test with valid id
-		//  - test invalid id
-		// getStatus(userId) 
-		//  - test with valid id
-		//  - test invalid id
-		// getVideos(userId) 
-		//  - test with valid id
-		//  - test invalid id
-		// getVideo(userId, videoId)
-		//  - test with valid user id, valid video id
-		//  - test with valid user id, invalid video id
-		//  - test with invalid user id, valid video id
-		// 
-
-/*
-
-		JSONObject friends = ms2.getFriends(id);
-//		System.out.println(friends);
-		Object f = friends.get("Friends");
-//		System.out.println(f.getClass().getName());
-//		System.out.println(f);
-		JSONArray fa = (JSONArray) f;
-		for (int i = 0; i < fa.size(); i++) {
-			JSONObject friend = (JSONObject) fa.get(i);
-			System.out.println(">>> Friend " + i + ":  " + friend.get("name"));
-		}
-//		System.out.println(((JSONArray) f).get(0));
-
-		JSONObject status = ms2.getStatus(id);
-		System.out.println(">>> Mood: " + status.get("mood"));
-		
-//		String response = ms.doHttpReq("http://api.myspace.com/request_token?oauth_consumer_key=77f44916a5144c97ad1ddc9ec53338cc&oauth_nonce=633707752256535691&oauth_signature=JgizpmzJL%2BT7L7L6Ctg3ObVmf8w%3D&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1235178414");
-//		System.out.println(response);
-*/
 	}
 }

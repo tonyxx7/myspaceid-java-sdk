@@ -22,7 +22,7 @@ public class MySpaceTest {
 		String key = "77f44916a5144c97ad1ddc9ec53338cc";
 		String secret = "51951d1f872c454d8932cd5f135623ae";
 
-		MySpace ms = new MySpace(key, secret);
+		MySpace ms = new MySpace(key, secret, ApplicationType.OFF_SITE);
 		OAuthToken token = ms.getRequestToken();
 		System.out.println(token);
 
@@ -41,7 +41,7 @@ public class MySpaceTest {
 		OAuthToken token3 = ms.getAccessToken(token2);
 
 		// Set static Myspace object and user id!
-		ms2 = new MySpace(key, secret, token3.getKey(), token3.getSecret());
+		ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, token3.getKey(), token3.getSecret());
 		id = ms2.getUserId();
 		System.out.println(">>> User id = " + id);
 	}
