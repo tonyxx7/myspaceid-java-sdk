@@ -1,0 +1,200 @@
+
+********************************
+getAlbums(String) with valid user id
+********************************
+getAlbums(String) 1: {"count":2,"albums":[{"id":817520,"title":"My Photos","photosUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/817520\/photos","albumUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/817520","location":"","privacy":"Everyone","photoCount":1,"defaultImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/m_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}},{"id":818419,"title":"a","photosUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/818419\/photos","albumUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/818419","location":"","privacy":"Everyone","photoCount":0,"defaultImage":"http:\/\/x.myspacecdn.com\/images\/nophoto-albums.gif","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getAlbums(String) with invalid user id 100
+********************************
+Exception occurred with getAlbums(String) 2nd test
+
+********************************
+getAlbums(String) with invalid user -1
+********************************
+Exception occurred with getAlbums(String) 3rd test
+
+********************************
+getAlbums(String, int, int) with valid user id and -1 for last 2 params
+********************************
+getAlbums(String, int, int) 1: {"count":2,"albums":[{"id":817520,"title":"My Photos","photosUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/817520\/photos","albumUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/817520","location":"","privacy":"Everyone","photoCount":1,"defaultImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/m_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}},{"id":818419,"title":"a","photosUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/818419\/photos","albumUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/818419","location":"","privacy":"Everyone","photoCount":0,"defaultImage":"http:\/\/x.myspacecdn.com\/images\/nophoto-albums.gif","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getAlbums(String, int, int) with 1 for last 2 params
+********************************
+getAlbums(String, int, int) 2: {"count":2,"next":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums.json?page=2&page_size=1","albums":[{"id":817520,"title":"My Photos","photosUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/817520\/photos","albumUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/817520","location":"","privacy":"Everyone","photoCount":1,"defaultImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/m_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getAlbums(String, int, int) with invalid page size
+********************************
+getAlbums(String, int, int) 3: {"count":0,"albums":[],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getAlbums(String, int, int) with invalid page
+********************************
+Exception occurred with getAlbums(String, int, int) 2nd test
+
+********************************
+getAlbum(String, int) with valid user id and valid album id
+********************************
+getAlbum(String, int) 1: {"photos":[{"imageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","id":4989903,"smallImageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"","caption":"On Gulangyu Isle","photoUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/albums\/817520\/photos\/4989903","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"},"uploadDate":"3\/9\/2009 9:30:56 AM"}],"count":1,"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getAlbum(String, int) with valid user id and invalid album id
+********************************
+Exception occurred with getAlbums(String, int, int) 2nd test
+
+********************************
+getAlbum(String, int) with invalid user id and valid album id
+********************************
+Exception occurred with getAlbums(String, int, int) 3rd test
+
+********************************
+getFriends(String) with valid user id
+********************************
+getFriends(String) 1: {"count":2,"topFriends":"http:\/\/api.myspace.com\/v1\/users\/454304609\/friends?list=top","Friends":[{"webUri":"http:\/\/www.myspace.com\/tom","userId":6221,"name":"Tom","largeImage":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_l.jpg","image":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_s.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/6221","userType":"RegularUser"},{"webUri":"http:\/\/www.myspace.com\/457099758","userId":457099758,"name":"A new app","largeImage":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","image":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","uri":"http:\/\/api.myspace.com\/v1\/users\/457099758","userType":"Application"}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriends(String) with invalid user id 100
+********************************
+Exception occurred with getFriends(String) 2nd test
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = top, show = mood
+********************************
+getFriends(String, int, int, String, String) 1: {"count":2,"Friends":[{"moodId":23,"moodImageUrl":"http:\/\/x.myspacecdn.com\/images\/blog\/moods\/iBrads\/artistic.gif","webUri":"http:\/\/www.myspace.com\/tom","userId":6221,"name":"Tom","mood":"moody","largeImage":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_l.jpg","image":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_s.jpg","moodLastUpdated":"2\/25\/2009 11:53:37 PM","uri":"http:\/\/api.myspace.com\/v1\/users\/6221","userType":"RegularUser"},{"moodId":0,"moodImageUrl":"http:\/\/x.myspacecdn.com\/modules\/common\/static\/img\/spacer.gif","webUri":"http:\/\/www.myspace.com\/457099758","userId":457099758,"name":"A new app","mood":"(none)","largeImage":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","image":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","moodLastUpdated":"1\/1\/0001 12:00:00 AM","uri":"http:\/\/api.myspace.com\/v1\/users\/457099758","userType":"Application"}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = top, show = mood|status
+********************************
+getFriends(String, int, int, String, String) 2: {"count":2,"Friends":[{"moodId":23,"moodImageUrl":"http:\/\/x.myspacecdn.com\/images\/blog\/moods\/iBrads\/artistic.gif","webUri":"http:\/\/www.myspace.com\/tom","status":"click &#39;view all&#39; at the bottom of the status & mood window. we now show your friends old updates, not just the latest one!","userId":6221,"name":"Tom","mood":"moody","largeImage":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_l.jpg","image":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_s.jpg","moodLastUpdated":"2\/25\/2009 11:53:37 PM","uri":"http:\/\/api.myspace.com\/v1\/users\/6221","userType":"RegularUser"},{"moodId":0,"moodImageUrl":"http:\/\/x.myspacecdn.com\/modules\/common\/static\/img\/spacer.gif","webUri":"http:\/\/www.myspace.com\/457099758","userId":457099758,"name":"A new app","mood":"(none)","largeImage":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","image":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","moodLastUpdated":"1\/1\/0001 12:00:00 AM","uri":"http:\/\/api.myspace.com\/v1\/users\/457099758","userType":"Application"}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = top, show = mood|status|online
+********************************
+getFriends(String, int, int, String, String) 3: {"count":2,"Friends":[{"moodImageUrl":"http:\/\/x.myspacecdn.com\/images\/blog\/moods\/iBrads\/artistic.gif","webUri":"http:\/\/www.myspace.com\/tom","status":"click &#39;view all&#39; at the bottom of the status & mood window. we now show your friends old updates, not just the latest one!","largeImage":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_l.jpg","mood":"moody","image":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_s.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/6221","userType":"RegularUser","moodId":23,"onlineNow":"False","name":"Tom","userId":6221,"moodLastUpdated":"2\/25\/2009 11:53:37 PM"},{"moodId":0,"moodImageUrl":"http:\/\/x.myspacecdn.com\/modules\/common\/static\/img\/spacer.gif","webUri":"http:\/\/www.myspace.com\/457099758","onlineNow":"False","userId":457099758,"name":"A new app","mood":"(none)","largeImage":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","image":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","moodLastUpdated":"1\/1\/0001 12:00:00 AM","uri":"http:\/\/api.myspace.com\/v1\/users\/457099758","userType":"Application"}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = top, show = mood | status | online
+********************************
+Exception occurred with getFriends(String) 4th test
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = online, show = status
+********************************
+getFriends(String, int, int, String, String) 5: {"count":0,"topFriends":"http:\/\/api.myspace.com\/v1\/users\/454304609\/friends?list=top","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = app, show = status
+********************************
+getFriends(String, int, int, String, String) 6: {"count":0,"topFriends":"http:\/\/api.myspace.com\/v1\/users\/454304609\/friends?list=top","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = top, show = online|status|mood
+********************************
+getFriends(String, int, int, String, String) 7: {"count":2,"Friends":[{"moodImageUrl":"http:\/\/x.myspacecdn.com\/images\/blog\/moods\/iBrads\/artistic.gif","webUri":"http:\/\/www.myspace.com\/tom","status":"click &#39;view all&#39; at the bottom of the status & mood window. we now show your friends old updates, not just the latest one!","largeImage":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_l.jpg","mood":"moody","image":"http:\/\/b2.ac-images.myspacecdn.com\/00000\/20\/52\/2502_s.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/6221","userType":"RegularUser","moodId":23,"onlineNow":"False","name":"Tom","userId":6221,"moodLastUpdated":"2\/25\/2009 11:53:37 PM"},{"moodId":0,"moodImageUrl":"http:\/\/x.myspacecdn.com\/modules\/common\/static\/img\/spacer.gif","webUri":"http:\/\/www.myspace.com\/457099758","onlineNow":"False","userId":457099758,"name":"A new app","mood":"(none)","largeImage":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","image":"http:\/\/x.myspacecdn.com\/images\/no_pic.gif","moodLastUpdated":"1\/1\/0001 12:00:00 AM","uri":"http:\/\/api.myspace.com\/v1\/users\/457099758","userType":"Application"}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriends(String, int, int, String, String) with valid user id, page, pageSize, list = top|app, show = status
+********************************
+Exception occurred with getFriends(String) 8th test
+
+********************************
+getFriendship(String, String) with valid user id, friend Id's
+********************************
+getFriendship(String, String) 1: {"friendship":[{"areFriends":true,"friendId":6221},{"areFriends":true,"friendId":457099758},{"areFriends":false,"friendId":457099751}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getFriendship(String, String) with valid user id, friend Id's
+********************************
+Exception occurred with getFriends(String) 2nd test
+
+********************************
+getMood(String) with valid user id
+********************************
+getMood(String) 1: {"moodId":0,"moodImageUrl":null,"mood":"none","moodLastUpdated":null,"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getMood(String) with invalid user id 100
+********************************
+Exception occurred with getMood(String) 2nd test
+
+********************************
+getPhotos(String, int, int) with valid user id, -1 for both page and pageSize
+********************************
+getPhotos(String, int, int) 1: {"photos":[{"imageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","id":4989903,"smallImageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"","caption":"On Gulangyu Isle","photoUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/photos\/4989903","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"},"uploadDate":"3\/9\/2009 9:30:56 AM"}],"count":1,"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getPhotos(String, int, int) with valid user id, page and pageSize
+********************************
+getPhotos(String, int, int) 2: {"photos":[{"imageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","id":4989903,"smallImageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"","caption":"On Gulangyu Isle","photoUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/photos\/4989903","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"},"uploadDate":"3\/9\/2009 9:30:56 AM"}],"count":1,"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getPhoto(String, int) with valid user id, valid photo id
+********************************
+getPhoto(String, int) 1: {"imageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","id":4989903,"smallImageUri":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"","caption":"On Gulangyu Isle","photoUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/photos\/4989903","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"},"uploadDate":"3\/9\/2009 9:30:56 AM"}
+
+********************************
+getPhoto(String, int) with valid user id, invalid photo id
+********************************
+Exception occurred with getPhoto(String, int) 2nd test
+
+********************************
+getProfile(String) with valid user id
+********************************
+getProfile(String) 1: {"region":"California","aboutme":"<br \/><br \/><p>test<\/p>\n","postalcode":"94133","maritalstatus":"Single","hometown":"","age":36,"gender":"Male","basicprofile":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"3\/10\/2009 9:26:59 AM","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609"},"type":"full","culture":"en-US","country":"US","city":"SAN FRANCISCO"}
+
+********************************
+getProfile(String) with invalid user id 100
+********************************
+Exception occurred with getProfile(String) 2nd test
+
+********************************
+getProfile(String) with valid user id and detailType = basic
+********************************
+getProfile(String) 1: {"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"3\/10\/2009 9:26:59 AM","type":"basic","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609"}
+
+********************************
+getProfile(String) with valid user id and detailType = full
+********************************
+getProfile(String) 2: {"region":"California","aboutme":"<br \/><br \/><p>test<\/p>\n","postalcode":"94133","maritalstatus":"Single","hometown":"","age":36,"gender":"Male","basicprofile":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"3\/10\/2009 9:26:59 AM","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609"},"type":"full","culture":"en-US","country":"US","city":"SAN FRANCISCO"}
+
+********************************
+getProfile(String) with valid user id and detailType = extended
+********************************
+getProfile(String) 3: {"headline":"","music":"","books":"","desiretomeet":"","occupation":"","television":"","heroes":"","interests":"","status":"","movies":"","mood":"","type":"extended","zodiacsign":"Capricorn","fullprofile":{"region":"California","aboutme":"<br \/><br \/><p>test<\/p>\n","postalcode":"94133","maritalstatus":"Single","hometown":"","age":36,"gender":"Male","basicprofile":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","lastUpdatedDate":"3\/10\/2009 9:26:59 AM","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609"},"culture":"en-US","country":"US","city":"SAN FRANCISCO"}}
+
+********************************
+getStatus(String) with valid user id
+********************************
+getStatus(String) 1: {"moodId":0,"moodImageUrl":null,"status":"none","mood":"none","moodLastUpdated":"1\/1\/0001 12:00:00 AM","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getStatus(String) with invalid user id 100
+********************************
+Exception occurred with getStatus(String) 2nd test
+
+********************************
+getVideos(String) with valid user id
+********************************
+getVideos(String) 1: {"count":1,"videos":[{"totalrating":"0","videoUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/videos\/53922436","totalcomments":"0","dateupdated":"3\/11\/2009 12:23:29 PM","privacy":"Public","resourceuserid":"454304609","runtime":"434","datecreated":"3\/11\/2009 12:22:38 PM","mediastatus":"ProcessingSuccessful","country":"US","id":53922436,"totalviews":"0","title":"Cowboy Bebop - The Real Folk Blues","thumbnail":"http:\/\/d3.ac-videos.myspacecdn.com\/videos02\/37\/thumb1_049a90e966c849659a009b6b12efda82.jpg","totalvotes":"0","description":"Awesome music -- video is a key part of the entire series.","language":"en","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"},"mediatype":"4"}],"user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}}
+
+********************************
+getVideos(String) with invalid user id 100
+********************************
+Exception occurred with getVideo(sString) 2nd test
+
+********************************
+getVideo(String, int) with valid user id, valid Video id
+********************************
+getVideo(String, int) 1: {"totalrating":"0","videoUri":"http:\/\/api.myspace.com\/v1\/users\/454304609\/videos\/53922436","totalcomments":"0","dateupdated":"3\/11\/2009 12:23:29 PM","privacy":"Public","resourceuserid":"454304609","runtime":"434","datecreated":"3\/11\/2009 12:22:38 PM","mediastatus":"ProcessingSuccessful","country":"US","id":53922436,"totalviews":"0","title":"Cowboy Bebop - The Real Folk Blues","thumbnail":"http:\/\/d3.ac-videos.myspacecdn.com\/videos02\/37\/thumb1_049a90e966c849659a009b6b12efda82.jpg","totalvotes":"0","description":"Awesome music -- video is a key part of the entire series.","language":"en","user":{"webUri":"http:\/\/www.myspace.com\/kiammyspace","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"},"mediatype":"4"}
+
+********************************
+getVideo(String, int) with valid user id, invalid Video id
+********************************
+Exception occurred with getVideo(String, int) 2nd test
+
+********************************
+getUser()
+********************************
+getUser() 1: {"webUri":"http:\/\/www.myspace.com\/kiammyspace","hash":"nmITojoEKwDTydAgymDU2TrIxaw=","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}

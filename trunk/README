@@ -1,0 +1,36 @@
+
+README -- MySpaceID
+*******************
+
+This package is the Java SDK for MySpaceID.  It allows developers to 
+conveniently develop applications that run off the MySpace site and yet 
+connect to a user's MySpace account.  Specifically, applications will be able 
+to redirect the user to authenticate at MySpace, after which the user's 
+MySpace account data become readable and writeable to the application.
+
+Two options for authentication are available in this SDK: OAuth and OpenID.  
+Specific instructions on how to achieve either are in the Javadocs in the 
+doc directory.
+
+This package is built on top of the openid4java package with minor 
+modifications.  Its source code only is included here, but if you need the 
+entire package, it is available at http://code.google.com/p/openid4java/.
+
+----------------------
+
+Package contents:
+
+build.xml - Ant build configuration
+
+LICENSE - MIT license.  The openid4java portions remain under the Apache 
+          license: 
+	    - everything under src/org
+	    - sample/hybrid/formredirection.jsp.
+
+doc/ - Javadoc for this SDK's API
+
+lib/ - Jar libraries needed
+
+sample/ - Sample apps demonstrating OAuth and OpenID-OAuth hybrid.  
+
+src/ - Source code
