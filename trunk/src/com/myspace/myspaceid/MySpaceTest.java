@@ -507,6 +507,15 @@ public class MySpaceTest {
 		System.out.println("getActvitiesAtom(String) 1: " + activities);
 	}
 
+	public static void testGetFriendsActivitiesAtom() {
+		// First test with valid id
+		printTitle("getFriendsActvitiesAtom(String) with valid user id");
+		String activities = ms2.getFriendsActvitiesAtom(id);
+
+		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
+		System.out.println("getFriendsActvitiesAtom(String) 1: " + activities);
+	}
+
 	public static void main(String[] args) throws Exception {
 		MySpaceTest.setUp();
 		MySpaceTest.testGetAlbums();
@@ -525,5 +534,6 @@ public class MySpaceTest {
 		MySpaceTest.testGetVideo();
 		MySpaceTest.testGetUser();
 		MySpaceTest.testGetActivitiesAtom();
+		MySpaceTest.testGetFriendsActivitiesAtom();
 	}
 }

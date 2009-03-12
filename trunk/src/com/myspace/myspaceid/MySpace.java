@@ -29,6 +29,7 @@ public class MySpace
 	protected static final String API_VIDEOS_URL     = "http://api.myspace.com/v1/users/%s/videos.json";
 	protected static final String API_VIDEO_URL      = "http://api.myspace.com/v1/users/%s/videos/%s.json";
 	protected static final String API_ACTIVITIES_URL = "http://api.myspace.com/v1/users/%s/activities.atom";
+	protected static final String API_FRIENDSACTIVITIES_URL = "http://api.myspace.com/v1/users/%s/friends/activities.atom";
 
 	// Member variables
 	protected OAuthConsumer consumer;
@@ -364,9 +365,23 @@ public class MySpace
 	}
 
 	/**
-	 *
+	 * Returns the activities of the user.
+	 * @param userId The ID of the user
+	 * @return the activity stream of the user.
 	 */
     public String getActvitiesAtom(String userId) {
+		return getActvitiesAtom(userId, null, null, null);
+	}
+
+	/**
+	 * Returns the activities of the user.
+	 * @param userId The ID of the user
+	 * @param culture (not used yet)
+	 * @param lastRetrievalTimeStamp (not used yet)
+	 * @param activityTypes (not used yet)
+	 * @return the activity stream of the user.
+	 */
+	public String getActvitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
 		requireAccessToken();
 		String url = API_ACTIVITIES_URL.replaceFirst("%s", userId);
 		String reqUrl = server.generateRequestUrl(url, accessToken.getSecret(), new HashMap<String, String>());
@@ -375,6 +390,32 @@ public class MySpace
 	}
 	//! Test this
 
+	/**
+	 * Returns the activities of the user's friends.
+	 * @param userId The ID of the user
+	 * @return the activity stream of the user's friends.
+	 */
+    public String getFriendsActvitiesAtom(String userId) {
+		return getFriendsActvitiesAtom(userId, null, null, null);
+	}
+
+	/**
+	 * Returns the activities of the user's friends.
+	 * @param userId The ID of the user
+	 * @param culture (not used yet)
+	 * @param lastRetrievalTimeStamp (not used yet)
+	 * @param activityTypes (not used yet)
+	 * @return the activity stream of the user's friends.
+	 */
+	public String getFriendsActvitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
+		requireAccessToken();
+		String url = API_FRIENDSACTIVITIES_URL.replaceFirst("%s", userId);
+		String reqUrl = server.generateRequestUrl(url, accessToken.getSecret(), new HashMap<String, String>());
+		String response = server.doHttpReq(reqUrl);
+		return response;
+	}
+	//! Test this
+	
 	/**
 	 * Sends REST request to get user data.
 	 * @param url URL prefix to use, e.g., http://api.myspace.com/v1/users/123456/albums.json
