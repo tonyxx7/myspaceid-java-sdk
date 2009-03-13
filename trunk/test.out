@@ -200,9 +200,9 @@ getUser()
 getUser() 1: {"webUri":"http:\/\/www.myspace.com\/kiammyspace","hash":"nmITojoEKwDTydAgymDU2TrIxaw=","userId":454304609,"name":"Kiam","largeImage":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/l_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","image":"http:\/\/c2.ac-images.myspacecdn.com\/images02\/17\/s_5fe161e1c82c4bf98a32eccabbcb1a49.jpg","uri":"http:\/\/api.myspace.com\/v1\/users\/454304609","userType":"RegularUser"}
 
 ********************************
-getActvitiesAtom(String) with valid user id
+getActivitiesAtom(String) with valid user id
 ********************************
 
 ********************************
-getFriendsActvitiesAtom(String) with valid user id
+getFriendsActivitiesAtom(String) with valid user id
 ********************************
