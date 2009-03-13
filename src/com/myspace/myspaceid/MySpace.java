@@ -388,8 +388,8 @@ public class MySpace
 	 * @param userId The ID of the user
 	 * @return the activity stream of the user.
 	 */
-    public String getActvitiesAtom(String userId) {
-		return getActvitiesAtom(userId, null, null, null);
+    public String getActivitiesAtom(String userId) {
+		return getActivitiesAtom(userId, null, null, null);
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class MySpace
 	 * @param activityTypes (not used yet)
 	 * @return the activity stream of the user.
 	 */
-	public String getActvitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
+	public String getActivitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
 		requireAccessToken();
 		String url = API_ACTIVITIES_URL.replaceFirst("%s", userId);
 		String reqUrl = server.generateRequestUrl(url, accessToken.getSecret(), new HashMap<String, String>());
@@ -414,8 +414,8 @@ public class MySpace
 	 * @param userId The ID of the user
 	 * @return the activity stream of the user's friends.
 	 */
-    public String getFriendsActvitiesAtom(String userId) {
-		return getFriendsActvitiesAtom(userId, null, null, null);
+    public String getFriendsActivitiesAtom(String userId) {
+		return getFriendsActivitiesAtom(userId, null, null, null);
 	}
 
 	/**
@@ -426,7 +426,7 @@ public class MySpace
 	 * @param activityTypes (not used yet)
 	 * @return the activity stream of the user's friends.
 	 */
-	public String getFriendsActvitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
+	public String getFriendsActivitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
 		requireAccessToken();
 		String url = API_FRIENDSACTIVITIES_URL.replaceFirst("%s", userId);
 		String reqUrl = server.generateRequestUrl(url, accessToken.getSecret(), new HashMap<String, String>());

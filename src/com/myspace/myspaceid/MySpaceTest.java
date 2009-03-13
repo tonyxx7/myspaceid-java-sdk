@@ -500,20 +500,20 @@ public class MySpaceTest {
 
 	public static void testGetActivitiesAtom() {
 		// First test with valid id
-		printTitle("getActvitiesAtom(String) with valid user id");
-		String activities = ms2.getActvitiesAtom(id);
+		printTitle("getActivitiesAtom(String) with valid user id");
+		String activities = ms2.getActivitiesAtom(id);
 
 		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
-		System.out.println("getActvitiesAtom(String) 1: " + activities);
+		System.out.println("getActivitiesAtom(String) 1: " + activities);
 	}
 
 	public static void testGetFriendsActivitiesAtom() {
 		// First test with valid id
-		printTitle("getFriendsActvitiesAtom(String) with valid user id");
-		String activities = ms2.getFriendsActvitiesAtom(id);
+		printTitle("getFriendsActivitiesAtom(String) with valid user id");
+		String activities = ms2.getFriendsActivitiesAtom(id);
 
 		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
-		System.out.println("getFriendsActvitiesAtom(String) 1: " + activities);
+		System.out.println("getFriendsActivitiesAtom(String) 1: " + activities);
 	}
 
 	public static void main(String[] args) throws Exception {
