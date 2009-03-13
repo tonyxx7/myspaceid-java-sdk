@@ -117,6 +117,7 @@ public class MySpace
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("oauth_token", requestToken.getKey()); // This needs to be populated from the outside!
 		String reqUrl = server.generateRequestUrl(OAUTH_ACCESS_TOKEN_URL, requestToken.getSecret(), map);
+System.out.println("+++++ " + reqUrl);
 		String response = server.doHttpReq(reqUrl);
 		OAuthToken token = new OAuthToken(response);
 		return token;
