@@ -1,37 +1,57 @@
 
 README -- MySpaceID
-*******************
+-------------------
 
-This package is the Java SDK for MySpaceID.  It allows developers to 
-conveniently develop applications that run off the MySpace site and yet 
-connect to a user's MySpace account.  Specifically, applications will be able 
-to redirect the user to authenticate at MySpace, after which the user's 
-MySpace account data become readable and writeable to the application.
+This package is the Java SDK for MySpaceID.
 
-Two options for authentication are available in this SDK: OAuth and OpenID.  
-Specific instructions on how to achieve either are in the Javadocs in the 
-doc directory.
+This SDK may be used in the following situations:
 
-This package is built on top of the openid4java package with minor 
-modifications.  Its source code only is included here, but if you need the 
-entire package, it is available at http://code.google.com/p/openid4java/.
+   1. External Website: You have a website and you want your users to be able 
+      to log on using their MySpace accounts. After a user logs on, this SDK 
+      will allow you to fetch his/her data such as name, friends, etc., from 
+      MySpace. See below for options on implementing authentication.
 
-----------------------
+   2. On-site App: You have a MySpace on-site application and you need to write 
+      server-side code that accesses user data. This SDK allows you to access 
+      user data without the need for authentication. 
 
-Recommended way of using MySpaceID
+In the first case, you will need to authenticate the user. In the second case, 
+authentication is not necessary, and you will be able to fetch information 
+about any user who has installed your application. 
 
-Get the samples in the sample directory working first.  Then customize the 
-code there to fit your needs.
+For case 1, straight OAuth or OpenID-OAuth hybrid are available.
+
+
+Documentation
+-------------
+
+Please refer to the documentation in the doc directory for more information on 
+how to implement.
+
+
+Developing with MySpaceID
+-------------------------
+
+Tbe best way to start is to get the samples in the sample directory working 
+first.  Then customize the code there to fit your needs.
+
+The samples have been built to run out of the box, but you must make sure to 
+run them using the correct path.  This is described when you first access the 
+index.jsp file in the samples directory.
+
+The samples use a consumer key/secret pair for demo purposes.  For your own 
+development, you must obtain your own.  If you use OpenID, you must also set 
+up your realm.  If you haven't already, visit the MySpace Developer site 
+(http://developer.myspace.com) to set things up.
 
 IMPORTANT: The domain on which you run your server MUST be entered as a realm 
-on your MySpace app configuration page.  In order for the rails samples to 
-work you MUST INCLUDE A SLASH AT THE END OF YOUR DOMAIN, e.g. 
+on your MySpace app configuration page.  In order for the samples to work 
+you MUST INCLUDE A SLASH AT THE END OF YOUR DOMAIN, e.g. 
 http://your-domain:3000/, when you enter it as a realm.
 
 
-----------------------
-
-Package contents:
+Package Contents
+----------------
 
 build.xml - Ant build configuration
 
@@ -49,4 +69,8 @@ sample/ - Sample apps demonstrating OAuth and OpenID-OAuth hybrid.
 src/ - Source code.  The sample consumer servlet 
        org/openid4java/samples/consumer-servlet/ConsumerServlet.java has 
        been adapated and is used by the OpenID-OAuth hybrid sample.
+
+Note: this package is built on top of the openid4java package with minor 
+modifications.  Its source code only is included here, but if you need the 
+entire package, it is available at http://code.google.com/p/openid4java/.
 
