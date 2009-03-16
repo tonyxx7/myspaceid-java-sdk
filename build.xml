@@ -9,7 +9,7 @@
   <property name="lib"  location="lib"/>
   <property name="doc"  location="doc"/>
   <property name="reports"  location="reports"/>
-  <property name="version"  value="1.0"/>
+  <property name="version"  value="beta"/>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -58,12 +58,18 @@
 
   <target name="doc"
         description="generate javadocs" >
-	<javadoc destdir="${doc}" Overview="${src}/overview.html" Header="MySpaceID Java SDK v. ${version}" Footer="Copyright 2009 MySpace">
+	<javadoc destdir="${doc}" Overview="${src}/overview.html" Header="MySpaceID Java SDK v. ${version}" Footer="Copyright 2009 MySpace" Public="yes">
 		<fileset dir="${src}">
 			<include name="**/*.java"/>
 			<exclude name="com/myspace/myspaceid/util/*.java"/>
+			<exclude name="com/myspace/myspaceid/MySpaceTest.java"/>
 			<exclude name="org/**/*.java"/>
 		</fileset>
+		<classpath>
+			<fileset dir="${lib}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</classpath>
 	</javadoc>
   </target>
 
