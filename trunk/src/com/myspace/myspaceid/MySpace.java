@@ -84,7 +84,7 @@ public class MySpace
 	 * to the URL found by calling {@link #getAuthorizationURL}.
 	 * @return A request token.
 	 */
-    public OAuthToken getRequestToken() throws Exception {
+    public OAuthToken getRequestToken() {
 		String reqUrl = server.generateRequestUrl(OAUTH_REQUEST_TOKEN_URL);
 		String response = server.doHttpReq(reqUrl);
 		OAuthToken token = new OAuthToken(response);
@@ -325,7 +325,7 @@ System.out.println("+++++ " + reqUrl);
 	 * Returns the profile of a given user.
 	 * This method requires that the access token has been stored in its MySpace object.
 	 * @param userId ID of user to query.
-	 * @parama detailType "basic", "full" or "extended"
+	 * @param detailType "basic", "full" or "extended"
 	 * @return the profile of the given user.
 	 */
     public JSONObject getProfile(String userId, String detailType) {
@@ -364,7 +364,7 @@ System.out.println("+++++ " + reqUrl);
 	 * Returns a video of the given user.
 	 * This method requires that the access token has been stored in its MySpace object.
 	 * @param userId ID of user to query.
-	 * @param photoId Id of photo to get.
+	 * @param videoId Id of photo to get.
 	 * @return a video of the given user.
 	 */
     public JSONObject getVideo(String userId, int videoId) {
@@ -374,7 +374,7 @@ System.out.println("+++++ " + reqUrl);
 	}
 
 	/**
-	 * Returns the current user as an object.  For most calls, you would first need to call {@link getUserId()} 
+	 * Returns the current user as an object.  For most calls, you would first need to call {@link #getUserId} 
 	 * to obtain the current user's id before you can access data.
 	 * @return the current user.
 	 */
@@ -475,9 +475,8 @@ System.out.println("+++++ " + reqUrl);
 	}
 
 	/**
-	 * Test driver.
 	 * @param args Arguments passed in.
 	 */
-	public static void main(String[] args) throws Exception {
-	}
+//	public static void main(String[] args) throws Exception {
+//	}
 }
