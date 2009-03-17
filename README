@@ -2,7 +2,58 @@
 README -- MySpaceID
 -------------------
 
-This package is the Java SDK for MySpaceID.
+This package is the Java SDK for MySpaceID, which lets your web servers 
+communicate with MySpace servers to request user data.
+
+
+How to Run the Samples
+----------------------
+
+Simply point your app server to the sample directory, start your app server, 
+and point your browser to the index.jsp file in the sample directory.
+
+The samples have been built to run out of the box, but you must make sure to 
+run them using the correct path.  This is described when you first access the 
+index.jsp file in the samples directory.
+
+The samples use a consumer key/secret pair for demo purposes.  For your own 
+development, you must obtain your own.  If you use OpenID, you must also set 
+up your realm.  If you haven't already, visit the MySpace Developer site 
+(http://developer.myspace.com) to set things up.
+
+IMPORTANT: The domain on which you run your server MUST be entered as a realm 
+on your MySpace app configuration page.  In order for the samples to work 
+you MUST INCLUDE A SLASH AT THE END OF YOUR DOMAIN, e.g. 
+http://your-domain:3000/, when you enter it as a realm.
+
+
+Overview of the Samples
+-----------------------
+
+OAuth
+-----
+This sample demonstrates an OAuth Consumer application by implementing 
+the OAuth delegated access flow ("3 legged oauth"). Once the User authorizes 
+the Consumer's request, it fetches the user's profile and friend information 
+using the library. 
+
+Hybrid
+------
+This sample demonstrates an OpenID "Combined Consumer" by implementing the 
+openid/oauth "hybrid" spec as specified at: 
+http://step2.googlecode.com/svn/spec/openid_oauth_extension/latest/openid_oauth_extension.html
+	
+This sample also demonstrates interaction with MySpace using the MySpace 
+library to fetch the user's profile and friends data.
+
+NOTE: Please note that in the samples above we store the access token in the 
+session. But, in a real application you would probably need to store it an 
+the user database so that you can call the MySpace API methods in the future 
+using the stored access token.
+
+
+Types of Applications
+---------------------
 
 This SDK may be used in the following situations:
 
@@ -19,35 +70,17 @@ In the first case, you will need to authenticate the user. In the second case,
 authentication is not necessary, and you will be able to fetch information 
 about any user who has installed your application. 
 
-For case 1, straight OAuth or OpenID-OAuth hybrid are available.
-
 
 Documentation
 -------------
 
-Please refer to the documentation in the doc directory for more information on 
-how to implement.
+The best way to get something working is to customize the existing samples.  
+But if you need additional documentation, please refer to:
 
-
-Developing with MySpaceID
--------------------------
-
-Tbe best way to start is to get the samples in the sample directory working 
-first.  Then customize the code there to fit your needs.
-
-The samples have been built to run out of the box, but you must make sure to 
-run them using the correct path.  This is described when you first access the 
-index.jsp file in the samples directory.
-
-The samples use a consumer key/secret pair for demo purposes.  For your own 
-development, you must obtain your own.  If you use OpenID, you must also set 
-up your realm.  If you haven't already, visit the MySpace Developer site 
-(http://developer.myspace.com) to set things up.
-
-IMPORTANT: The domain on which you run your server MUST be entered as a realm 
-on your MySpace app configuration page.  In order for the samples to work 
-you MUST INCLUDE A SLASH AT THE END OF YOUR DOMAIN, e.g. 
-http://your-domain:3000/, when you enter it as a realm.
+* Javadocs documentation for this SDK's API is in the doc directory
+* MySpaceID Wiki - http://developerwiki.myspace.com/index.php?title=Category:MySpaceID
+* MySpaceID Forum Discussions - http://developer.myspace.com/Community/forums/60.aspx
+* MySpace Developer Site - http://developer.myspace.com
 
 
 Package Contents
