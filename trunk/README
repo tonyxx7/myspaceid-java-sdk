@@ -19,7 +19,9 @@ index.jsp file in the samples directory.
 The samples use a consumer key/secret pair for demo purposes.  For your own 
 development, you must obtain your own.  If you use OpenID, you must also set 
 up your realm.  If you haven't already, visit the MySpace Developer site 
-(http://developer.myspace.com) to set things up.
+(http://developer.myspace.com) to set things up.  Please see 
+http://developerwiki.myspace.com/index.php?title=How_to_Set_Up_a_New_Application_for_OpenID
+for a walkthrough.
 
 IMPORTANT: The domain on which you run your server MUST be entered as a realm 
 on your MySpace app configuration page.  In order for the samples to work 
