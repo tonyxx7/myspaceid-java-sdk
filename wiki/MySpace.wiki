@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary MySpace and MySpaceID.
 
 = Introduction =
 MySpace is a social networking website with an interactive, user-submitted network of friends, personal profiles, blogs, groups, photos, music, and videos. MySpace includes an application developer platform, which allows developers to write their own MySpace applications, and which provides a level of support for open stack application development, including the Open Social API. The MySpaceID initiative is part of the developer support provided by the developer platform.
