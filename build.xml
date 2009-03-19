@@ -8,7 +8,8 @@
   <property name="dist"  location="dist"/>
   <property name="lib"  location="lib"/>
   <property name="doc"  location="doc"/>
-  <property name="reports"  location="reports"/>
+  <property name="sample"  location="sample"/>
+  <property name="downloads"  location="downloads/"/>
   <property name="version"  value="beta"/>
 
   <target name="init">
@@ -18,8 +19,7 @@
     <mkdir dir="${dist}"/>
     <mkdir dir="${build}"/>
     <mkdir dir="${doc}"/>
-    <mkdir dir="${reports}"/>
-    <mkdir dir="${reports}/raw"/>
+    <mkdir dir="${downloads}"/>
   </target>
 
   <target name="compile" depends="init"
@@ -79,7 +79,17 @@
     <delete dir="${build}"/>
     <delete dir="${dist}"/>
     <delete dir="${doc}"/>
-    <delete dir="${reports}"/>
+	<!-- Don't delete the downloads directory; leave it around as a history of releases. -->
+  </target>
+
+  <target name="zip" depends="dist"
+        description="zip and create a downloadable">
+    <zip destfile="${downloads}/myspaceid-java-sdk-${DSTAMP}.zip">
+	  <zipfileset dir="${doc}" prefix="doc" excludes="**/*.bak"/>
+	  <zipfileset dir="${lib}" prefix="lib" excludes="**/*.bak"/>
+	  <zipfileset dir="${sample}" prefix="sample" excludes="**/*.bak"/>
+	  <zipfileset dir="${src}" prefix="src" excludes="**/*.bak"/>
+	</zip>
   </target>
 
 </project>
