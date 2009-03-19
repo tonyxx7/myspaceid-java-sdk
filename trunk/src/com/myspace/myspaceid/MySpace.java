@@ -136,7 +136,7 @@ System.out.println("+++++ " + reqUrl);
     public String getUserId() {
 		requireAccessToken();
 		HashMap<String, String> map = new HashMap<String, String>();
-		String reqUrl = server.generateRequestUrl(API_USERINFO_URL, accessToken.getSecret(), map);
+		String reqUrl = server.generateRequestUrl(API_USERINFO_URL, accessToken == null ? "" : accessToken.getSecret(), map);
 		String response = server.doHttpReq(reqUrl);
 
 		JSONParser parser = new JSONParser();
@@ -404,7 +404,7 @@ System.out.println("+++++ " + reqUrl);
 	public String getActivitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
 		requireAccessToken();
 		String url = API_ACTIVITIES_URL.replaceFirst("%s", userId);
-		String reqUrl = server.generateRequestUrl(url, accessToken.getSecret(), new HashMap<String, String>());
+		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), new HashMap<String, String>());
 		String response = server.doHttpReq(reqUrl);
 		return response;
 	}
@@ -430,7 +430,7 @@ System.out.println("+++++ " + reqUrl);
 	public String getFriendsActivitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
 		requireAccessToken();
 		String url = API_FRIENDSACTIVITIES_URL.replaceFirst("%s", userId);
-		String reqUrl = server.generateRequestUrl(url, accessToken.getSecret(), new HashMap<String, String>());
+		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), new HashMap<String, String>());
 		String response = server.doHttpReq(reqUrl);
 		return response;
 	}
@@ -443,7 +443,7 @@ System.out.println("+++++ " + reqUrl);
 	 * @return user data in a {@link UserData} object.
 	 */
 	protected JSONObject getUserData(String url, HashMap<String, String> map) {
-		String reqUrl = server.generateRequestUrl(url, accessToken.getSecret(), map);
+		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), map);
 		String response = server.doHttpReq(reqUrl);
 		JSONParser parser = new JSONParser();
 		JSONObject obj = null;
