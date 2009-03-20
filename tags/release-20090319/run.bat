@@ -1,0 +1,1 @@
+java -classpath "lib/json_simple-1.1.jar;build" com.myspace.myspaceid.MySpace %1 %2 %3 %4 %5 %6
