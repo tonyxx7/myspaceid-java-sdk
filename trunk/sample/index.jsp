@@ -5,7 +5,7 @@
 	<meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
 </head>
 <body>
-<a href='http://developer.myspace.com'><img border='0' src='img/mdp_logo.jpg'/></a><br>
+<a href='http://developer.myspace.com'><img border='0' src='img/Myspaceid.jpg'/></a><br>
 <h2>MySpaceID Samples</h2>
 <ul>
 <li><a href="oauth/oauth-login.jsp">OAuth login sample</a></li>
