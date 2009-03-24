@@ -8,6 +8,7 @@ import org.json.simple.parser.*;
 import com.myspace.myspaceid.*;
 import com.myspace.myspaceid.oauth.*;
 
+// Run using account kiammyspace
 public class MySpaceTest {
 	private static String id = null;
 	private static MySpace ms2 = null;
@@ -26,7 +27,8 @@ public class MySpaceTest {
 		OAuthToken token = ms.getRequestToken();
 		System.out.println(token);
 
-		String str = ms.getAuthorizationURL(token, "http://testcallback");
+//		String str = ms.getAuthorizationURL(token, "http://testcallback");
+		String str = ms.getAuthorizationURL(token, "http://localhost:8080/myspaceid-sample/oauth/oauth-demo.jsp?callback=true");
 		System.out.println("\nAuthorization URL (copy and access this URL using a browser and log in): \n" + str);
 
 		System.out.print("\nEnter the new request token key from the callback: ");
@@ -75,7 +77,7 @@ public class MySpaceTest {
 			data = ms2.getAlbums("100");
 			out.println("getAlbums(String) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getAlbums(String) 2nd test");
 		}
@@ -87,7 +89,7 @@ public class MySpaceTest {
 			data = ms2.getAlbums("-1");
 			out.println("getAlbums(String) 3: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getAlbums(String) 3rd test");
 		}
@@ -112,7 +114,7 @@ public class MySpaceTest {
 			data = ms2.getAlbums(id, 1, -2);
 			out.println("getAlbums(String, int, int) 3: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getAlbums(String, int, int) 1st test");
 		}
@@ -123,7 +125,7 @@ public class MySpaceTest {
 			data = ms2.getAlbums(id, 0, 1);
 			out.println("getAlbums(String, int, int) 4: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getAlbums(String, int, int) 2nd test");
 		}
@@ -148,7 +150,7 @@ public class MySpaceTest {
 			data = ms2.getAlbum(id, -1111);
 			out.println("getAlbum(String, int) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getAlbums(String, int, int) 2nd test");
 		}
@@ -159,7 +161,7 @@ public class MySpaceTest {
 			data = ms2.getAlbum("-1", albumId);
 			out.println("getAlbum(String, int) 3: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getAlbums(String, int, int) 3rd test");
 		}
@@ -181,7 +183,7 @@ public class MySpaceTest {
 			data = ms2.getFriends("100");
 			out.println("getFriends(String) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getFriends(String) 2nd test");
 		}
@@ -213,7 +215,7 @@ public class MySpaceTest {
 			data = ms2.getFriends(id, 1, 1, "top", "mood | status | online");
 			out.println("getFriends(String, int, int, String, String) 4: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getFriends(String) 4th test");
 		}
@@ -240,7 +242,7 @@ public class MySpaceTest {
 			data = ms2.getFriends(id, 1, 1, "top|app", "status");
 			out.println("getFriends(String, int, int, String, String) 8: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getFriends(String) 8th test");
 		}
@@ -274,7 +276,7 @@ public class MySpaceTest {
 			data = ms2.getFriendship(id, friendIds + ";-1");
 			out.println("getFriendship(String, String) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getFriends(String) 2nd test");
 		}
@@ -299,7 +301,7 @@ public class MySpaceTest {
 			data = ms2.getMood("100");
 			out.println("getMood(String) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getMood(String) 2nd test");
 		}
@@ -352,7 +354,7 @@ public class MySpaceTest {
 			data = ms2.getPhoto(id, -12345);
 			out.println("getPhotos(String, int) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getPhoto(String, int) 2nd test");
 		}	
@@ -377,7 +379,7 @@ public class MySpaceTest {
 			data = ms2.getProfile("100");
 			out.println("getProfile(String) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getProfile(String) 2nd test");
 		}
@@ -426,7 +428,41 @@ public class MySpaceTest {
 			data = ms2.getStatus("100");
 			out.println("getStatus(String) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getStatus(String) 2nd test");
+		}
+	}
+
+	public static void testPostStatus() {
+		Object data = null;
+		JSONObject obj = null;
+
+		printTitle("postStatus(String) with valid user id");
+		data = ms2.postStatus(id, "Hello World  又更新了状态 --  ~!@#$%^&*()_+{}:\"<>?`-=[];',./");
+		out.println("postStatus(String) 1: '" + (String) data + "'");
+	}
+
+	public static void testGetFriendsStatus() {
+		//  - test with valid id
+		//  - test invalid id
+
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		// First test with valid id
+		printTitle("getStatus(String) with valid user id");
+		data = ms2.getFriendsStatus(id);
+		out.println("getStatus(String) 1: " + data);
+
+		// 2nd test with invalid id
+		printTitle("getStatus(String) with invalid user id 100");
+		try
+		{
+			data = ms2.getFriendsStatus("100");
+			out.println("getStatus(String) 2: " + data);
+		}
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getStatus(String) 2nd test");
 		}
@@ -452,9 +488,9 @@ public class MySpaceTest {
 			data = ms2.getVideos("100");
 			out.println("getVideos(String) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
-			out.println("Exception occurred with getVideo(sString) 2nd test");
+			out.println("Exception occurred with getVideo(String) 2nd test");
 		}
 	}
 
@@ -483,7 +519,7 @@ public class MySpaceTest {
 			data = ms2.getVideo(id, -12345);
 			out.println("getVideos(String, int) 2: " + data);
 		}
-		catch (MySpaceException e)
+		catch (Exception e)
 		{
 			out.println("Exception occurred with getVideo(String, int) 2nd test");
 		}	
@@ -518,6 +554,7 @@ public class MySpaceTest {
 
 	public static void main(String[] args) throws Exception {
 		MySpaceTest.setUp();
+
 		MySpaceTest.testGetAlbums();
 		MySpaceTest.testGetAlbums2();
 		MySpaceTest.testGetAlbum();
@@ -530,10 +567,13 @@ public class MySpaceTest {
 		MySpaceTest.testGetProfile();
 		MySpaceTest.testGetProfile2();
 		MySpaceTest.testGetStatus();
+		MySpaceTest.testGetFriendsStatus();
 		MySpaceTest.testGetVideos();
 		MySpaceTest.testGetVideo();
 		MySpaceTest.testGetUser();
 		MySpaceTest.testGetActivitiesAtom();
 		MySpaceTest.testGetFriendsActivitiesAtom();
+
+//		MySpaceTest.testPostStatus();
 	}
 }

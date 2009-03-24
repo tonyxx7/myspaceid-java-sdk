@@ -25,7 +25,9 @@ public class MySpace
 	protected static final String API_PHOTOS_URL     = "http://api.myspace.com/v1/users/%s/photos.json";
 	protected static final String API_PHOTO_URL      = "http://api.myspace.com/v1/users/%s/photos/%s.json";
 	protected static final String API_PROFILE_URL    = "http://api.myspace.com/v1/users/%s/profile.json";
+	protected static final String API_FRIENDS_STATUS_URL = "http://api.myspace.com/v1/users/%s/friends/status.json";
 	protected static final String API_STATUS_URL     = "http://api.myspace.com/v1/users/%s/status.json";
+	protected static final String API_PUT_STATUS_URL = "http://api.myspace.com/v1/users/%s/status";
 	protected static final String API_VIDEOS_URL     = "http://api.myspace.com/v1/users/%s/videos.json";
 	protected static final String API_VIDEO_URL      = "http://api.myspace.com/v1/users/%s/videos/%s.json";
 	protected static final String API_ACTIVITIES_URL = "http://api.myspace.com/v1/users/%s/activities.atom";
@@ -349,6 +351,32 @@ System.out.println("+++++ " + reqUrl);
 	}
 
 	/**
+	 * Posts a status update.
+	 * @param userId ID of user to query.
+	 * @status Status update to post.
+	 * @return the return string from the server.
+	 */
+    public Object postStatus(String userId, String status) {
+		requireAccessToken();
+		String url = API_PUT_STATUS_URL.replaceFirst("%s", userId);
+		HashMap<String, String> map = new HashMap<String, String>();
+		return putUserData(url, map, "status", status);
+	}
+	
+	/**
+	 * Returns the status of a given user's friends.
+	 * This method requires that the access token has been stored in its MySpace object.
+	 * @param userId ID of user to query.
+	 * @return the status of the given user's friends.
+	 */
+    public JSONObject getFriendsStatus(String userId) {
+		requireAccessToken();
+		String url = API_FRIENDS_STATUS_URL.replaceFirst("%s", userId);
+		return getUserData(url, new HashMap<String, String>());
+	}
+
+	
+	/**
 	 * Returns the videos of a given user.
 	 * This method requires that the access token has been stored in its MySpace object.
 	 * @param userId ID of user to query.
@@ -451,14 +479,64 @@ System.out.println("+++++ " + reqUrl);
 		{
 			obj = (JSONObject) parser.parse(response);
 		}
-		catch (ParseException pe)
+		catch (ParseException e)
 		{
-			throw new MySpaceException(pe.getMessage(), MySpaceException.REMOTE_ERROR);
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			throw new MySpaceException(sw.toString(), MySpaceException.REMOTE_ERROR);
 		}
 
 		return obj;
-//		return new UserData(obj);
 	}
+
+
+	/**
+	 * Sends REST request to put user data.
+	 * @param url URL prefix to use, e.g., http://api.myspace.com/v1/users/28568917/status
+	 * @param map HashMap of additional parameters to send that are specific to this request
+	 * @param putParam Name of parameter to put
+	 * @param putValue Value of parameter to put
+	 * @return user data in a {@link UserData} object.
+	 */
+	protected Object putUserData(String url, HashMap<String, String> map, String putParam, String putValue) {
+		if (putParam == null || putValue == null)
+			throw new MySpaceException("Put parameter or value cannot be null.");
+
+		map.put(putParam, putValue); 
+		
+		//
+		// Note: for signing, the base string has to include the value being put, but the value is 
+		// taken out of the parameter string itself and sent in the body of the request.  For instance, 
+		// the below is a working HTTP conversation.
+		// 
+		// POST /v1/users/28568917/status?oauth_consumer_key=77f44916a5144c97ad1ddc9ec53338cc&oauth_nonce=8783759987300271273&oauth_signature_method=HMAC-SHA1&oauth_timestamp=1237853013&oauth_token=8QLGnqFugwmCbIz6pcFbNEMPkG%252FCsZrg4fdqIzXpj88FsZaysd7wJ4eBonbvpAG7MOCFhzDjcM1yp6wvO%252BRaeyruy95QdfpFIHQaHvHL7ak%253D&oauth_version=1.0&oauth_signature=TvlXbt%2FNS0U7SrtUvUfu%2BfJ3kyo%3D HTTP/1.1
+		// X-HTTP-Method-Override: PUT
+		// User-Agent: Java/1.6.0_12
+		// Host: api.myspace.com
+		// Accept: text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2
+		// Proxy-Connection: keep-alive
+		// Content-type: application/x-www-form-urlencoded
+		// Content-Length: 264
+		// 
+		// status=Hello%20World%20%20%E7%BB%88%E4%BA%8E%E6%88%90%E5%8A%9F%E4%BA%86%EF%BC%81%21%21%20Can%20you%20believe%20that%20I%27m%20now%20posting%20status%20updates%20successfully%21%3F%20~%21%40%23%24%25%5E%26%2A%28%29_%2B%7B%7D%3A%22%3C%3E%3F%60-%3D%5B%5D%3B%27%2C.%2F
+		//
+
+		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), map, "PUT", putParam);
+		String response = null;
+		try
+		{
+			response = server.doHttpMethodReq(reqUrl, "PUT", putParam + "=" + OAuthServer.encode(putValue));
+		}
+		catch (Exception e)
+		{
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			throw new MySpaceException(sw.toString(), MySpaceException.REMOTE_ERROR);
+		}
+
+		return (String) response;
+	}
+
 
 	/**
 	 * Checks that an access token has been set up (done by using the constructor with 4 arguments).  Throws an exception if not.
