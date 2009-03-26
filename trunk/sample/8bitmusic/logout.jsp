@@ -6,7 +6,7 @@
 <title>8-Bit Music</title>
 <body>
 <%
-request.getSession().setAttribute("openid.oauth.request_token", null);
+request.getSession().setAttribute("accessToken", null);
 %>
 You are now logged out.  <a href='index.jsp'>Click here to return to sample.</a>
 </body>

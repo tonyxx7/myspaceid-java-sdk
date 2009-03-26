@@ -11,8 +11,8 @@
 
 	<div>
 <%
-    String key = "77f44916a5144c97ad1ddc9ec53338cc"; // This is set also in web.xml file
-    String secret = "51951d1f872c454d8932cd5f135623ae";
+    String key = "18bed0f4247a4f79bc9941bfed5b534c"; // This is set also in web.xml file
+    String secret = "2e8ebdafbef844a5929086e659e4188c";
 
 	// Callback invoked.  Authorization done.  Display user info.
 	// Unlike the OAuth case, getting the access token doesn't require a new secret.

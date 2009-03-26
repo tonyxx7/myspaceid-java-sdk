@@ -8,7 +8,7 @@
     <servlet-class>org.openid4java.samples.consumerservlet.ConsumerServlet</servlet-class>
     <init-param>
 	  <param-name>key</param-name>
-	  <param-value>77f44916a5144c97ad1ddc9ec53338cc</param-value>
+	  <param-value>18bed0f4247a4f79bc9941bfed5b534c</param-value>
     </init-param>
     <init-param>
 	  <param-name>return</param-name>

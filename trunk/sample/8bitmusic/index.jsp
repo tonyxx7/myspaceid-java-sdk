@@ -2,23 +2,41 @@
 <!--jsp:include page="userStatus.jsp"/-->
 
 <%!
-private String CONSUMER_KEY = "77f44916a5144c97ad1ddc9ec53338cc";
-private String CONSUMER_SECRET = "51951d1f872c454d8932cd5f135623ae";
+private String CONSUMER_KEY = "18bed0f4247a4f79bc9941bfed5b534c";
+private String CONSUMER_SECRET = "2e8ebdafbef844a5929086e659e4188c";
 
 private  boolean isLoggedin(HttpServletRequest req) {
-	return req.getSession().getAttribute("openid.oauth.request_token") != null;
+	return req.getSession().getAttribute("accessToken") != null;
 }
 %>
 
 <%
+// If new run, clear out session
+//if (request.getParameter("newrun") != null)
+//	request.getSession().setAttribute("openid.oauth.request_token", null);
 
-// Set realm
+// Set realm and return to URL
 String fullURL = request.getRequestURL().toString();
 int j = fullURL.indexOf("index.jsp");
-String realm = fullURL;
-if (j != -1)
-	realm = fullURL.substring(0, j);
-System.out.println("************* " + realm);
+String returnTo = null;
+String returnToJSP = "finish_auth.jsp";
+if (j > -1)
+	returnTo = fullURL.substring(0, j) + returnToJSP;
+else { // Then probably this index.jsp being accessed as default file, e.g., http://localhost:9090/myspaceid-sample/8bitmusic
+	if (!fullURL.endsWith("/"))
+		fullURL = fullURL + "/";
+	returnTo = fullURL + returnToJSP;
+}
+System.out.println("************* returnTo = " + returnTo);
+
+String realm = null;
+int k = fullURL.indexOf("://");
+int l = fullURL.indexOf("/", k + 3);
+if (l > -1)
+	realm = fullURL.substring(0, l + 1);
+else
+	realm = fullURL + "/";
+System.out.println("************* realm = " + realm);
 
 JSONObject profile_ext_data = null;
 JSONObject profile_data = null;
@@ -26,8 +44,7 @@ JSONObject friends_data = null;
 String activities_data = null;
 String friendsActivities_data = null;
 if(isLoggedin(request) && request.getParameter("newrun") == null){
-	OAuthToken token2 = new OAuthToken((String) request.getSession().getAttribute("openid.oauth.request_token"), "");
-	OAuthToken accessToken = new MySpace(CONSUMER_KEY, CONSUMER_SECRET).getAccessToken(token2);
+	OAuthToken accessToken = (OAuthToken) request.getSession().getAttribute("accessToken");
 
 	//create new myspace object to make requests.
 	MySpace ms = new MySpace(CONSUMER_KEY,CONSUMER_SECRET,ApplicationType.OFF_SITE,accessToken.getKey(),accessToken.getSecret());
@@ -58,8 +75,8 @@ if(isLoggedin(request) && request.getParameter("newrun") == null){
 var msOptions = {
 	api_base:'http://api.myspace.com/openid',
 	realm:'<%=realm%>',
-	returnTo:'finish_auth.jsp',
-	consumer:'77f44916a5144c97ad1ddc9ec53338cc',
+	returnTo:'<%=returnTo%>',
+	consumer:'<%=CONSUMER_KEY%>',
 	popupSize:{ width:580, height:600}
 };
 </script>

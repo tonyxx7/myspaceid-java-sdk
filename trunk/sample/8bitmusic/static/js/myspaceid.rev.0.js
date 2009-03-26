@@ -33,8 +33,8 @@ MySpaceID.Util = {
 			_url += "&openid.mode=checkid_setup";
 			_url += "&openid.claimed_id=" + MySpaceID.Util.urlencode("http://specs.openid.net/auth/2.0/identifier_select");
 			_url += "&openid.identity=" + MySpaceID.Util.urlencode("http://specs.openid.net/auth/2.0/identifier_select");
-			_url += "&openid.return_to=" + MySpaceID.Util.urlencode(/*options.server + */options.realm + options.returnTo);
-			_url += "&openid.realm=" + MySpaceID.Util.urlencode(/*options.server + */options.realm + options.returnTo);
+			_url += "&openid.return_to=" + MySpaceID.Util.urlencode(options.returnTo);
+			_url += "&openid.realm=" + MySpaceID.Util.urlencode(options.realm);
 		return _url;
 	},
 	getWindowSizeStr:function(options){
