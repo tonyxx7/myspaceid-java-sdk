@@ -1,8 +1,7 @@
 <%@ page import="com.myspace.myspaceid.*,com.myspace.myspaceid.oauth.*" %>
 <%
-String CONSUMER_KEY = "77f44916a5144c97ad1ddc9ec53338cc";
-String CONSUMER_SECRET = "51951d1f872c454d8932cd5f135623ae";
-request.getSession().setAttribute("openid.oauth.request_token", request.getParameter("openid.oauth.request_token"));
+String CONSUMER_KEY = "18bed0f4247a4f79bc9941bfed5b534c";
+String CONSUMER_SECRET = "2e8ebdafbef844a5929086e659e4188c";
 
 //	OAuthToken token2 = new OAuthToken((String) request.getSession().getAttribute("openid.oauth.request_token"), "");
 //System.out.println("*************" + (String) request.getSession().getAttribute("openid.oauth.request_token"));
@@ -10,7 +9,10 @@ request.getSession().setAttribute("openid.oauth.request_token", request.getParam
 //	OAuthToken accessToken = ms.getAccessToken(token2);
 //System.out.println("*************2222222" + accessToken.getKey());
 
-
+// Get access token
+OAuthToken token2 = new OAuthToken(request.getParameter("openid.oauth.request_token"), "");
+OAuthToken accessToken = new MySpace(CONSUMER_KEY, CONSUMER_SECRET).getAccessToken(token2);
+request.getSession().setAttribute("accessToken", accessToken);
 %>
 <html>
 <head>
@@ -30,7 +32,7 @@ request.getSession().setAttribute("openid.oauth.request_token", request.getParam
 
 <script>
 function closeWin() {
-  window.opener.success("<%=request.getParameter("openid.oauth.request_token")%>");
+  window.opener.success();
   self.close();
 }
 </script>

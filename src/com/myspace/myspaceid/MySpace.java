@@ -28,6 +28,7 @@ public class MySpace
 	protected static final String API_FRIENDS_STATUS_URL = "http://api.myspace.com/v1/users/%s/friends/status.json";
 	protected static final String API_STATUS_URL     = "http://api.myspace.com/v1/users/%s/status.json";
 	protected static final String API_PUT_STATUS_URL = "http://api.myspace.com/v1/users/%s/status";
+	protected static final String API_PUT_MOOD_URL = "http://api.myspace.com/v1/users/%s/mood";
 	protected static final String API_VIDEOS_URL     = "http://api.myspace.com/v1/users/%s/videos.json";
 	protected static final String API_VIDEO_URL      = "http://api.myspace.com/v1/users/%s/videos/%s.json";
 	protected static final String API_ACTIVITIES_URL = "http://api.myspace.com/v1/users/%s/activities.atom";
@@ -353,7 +354,7 @@ System.out.println("+++++ " + reqUrl);
 	/**
 	 * Posts a status update.
 	 * @param userId ID of user to query.
-	 * @status Status update to post.
+	 * @param Status update to post.
 	 * @return the return string from the server.
 	 */
     public Object postStatus(String userId, String status) {
@@ -363,6 +364,19 @@ System.out.println("+++++ " + reqUrl);
 		return putUserData(url, map, "status", status);
 	}
 	
+	/**
+	 * Posts a mood update.
+	 * @param userId ID of user to query.
+	 * @param mood update to post.
+	 * @return the return string from the server.
+	 */
+    public Object postMood(String userId, int mood) {
+		requireAccessToken();
+		String url = API_PUT_MOOD_URL.replaceFirst("%s", userId);
+		HashMap<String, String> map = new HashMap<String, String>();
+		return putUserData(url, map, "mood", "" + mood);
+	}
+
 	/**
 	 * Returns the status of a given user's friends.
 	 * This method requires that the access token has been stored in its MySpace object.

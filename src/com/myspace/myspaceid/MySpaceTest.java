@@ -443,6 +443,15 @@ public class MySpaceTest {
 		out.println("postStatus(String) 1: '" + (String) data + "'");
 	}
 
+	public static void testPostMood() {
+		Object data = null;
+		JSONObject obj = null;
+
+		printTitle("postStatus(String) with valid user id");
+		data = ms2.postMood(id, 1);
+		out.println("postMood(String) 1: '" + (String) data + "'");
+	}
+
 	public static void testGetFriendsStatus() {
 		//  - test with valid id
 		//  - test invalid id
@@ -554,7 +563,7 @@ public class MySpaceTest {
 
 	public static void main(String[] args) throws Exception {
 		MySpaceTest.setUp();
-
+/*
 		MySpaceTest.testGetAlbums();
 		MySpaceTest.testGetAlbums2();
 		MySpaceTest.testGetAlbum();
@@ -573,7 +582,8 @@ public class MySpaceTest {
 		MySpaceTest.testGetUser();
 		MySpaceTest.testGetActivitiesAtom();
 		MySpaceTest.testGetFriendsActivitiesAtom();
-
+*/
 //		MySpaceTest.testPostStatus();
+		MySpaceTest.testPostMood();
 	}
 }

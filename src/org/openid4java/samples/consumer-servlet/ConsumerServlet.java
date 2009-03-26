@@ -126,8 +126,8 @@ public class ConsumerServlet extends javax.servlet.http.HttpServlet {
 			// configure the return_to URL where your application will receive
 			// the authentication responses from the OpenID provider
 			// String returnToUrl = "http://example.com/openid";
-			String returnToUrl = httpReq.getRequestURL().toString()
-					+ "?is_return=true";
+			String fullURL = httpReq.getRequestURL().toString();
+			String returnToUrl = fullURL + "?is_return=true";
 
 			// perform discovery on the user-supplied identifier
 			List discoveries = manager.discover(userSuppliedString);
@@ -140,7 +140,14 @@ public class ConsumerServlet extends javax.servlet.http.HttpServlet {
 			httpReq.getSession().setAttribute("openid-disc", discovered);
 
 			// obtain a AuthRequest message to be sent to the OpenID provider
-			AuthRequest authReq = manager.authenticate(discovered, returnToUrl);
+			String realm = null;
+			int k = fullURL.indexOf("://");
+			int l = fullURL.indexOf("/", k + 3);
+			if (l > -1)
+				realm = fullURL.substring(0, l + 1);
+			else
+				realm = fullURL + "/";
+			AuthRequest authReq = manager.authenticate(discovered, returnToUrl, realm);
 
 			// Attribute Exchange example: fetching the 'email' attribute
 			FetchRequest fetch = FetchRequest.createFetchRequest();
