@@ -84,7 +84,8 @@
 
   <target name="zip" depends="dist"
         description="zip and create a downloadable">
-    <zip destfile="${downloads}/myspaceid-java-sdk-${DSTAMP}.zip">
+    <zip destfile="${downloads}/myspaceid-java-sdk-${DSTAMP}.zip" >
+	  <zipfileset dir="." includes="LICENSE,run.bat,test.out,README,build.xml,runtest.bat"/>
 	  <zipfileset dir="${doc}" prefix="doc" excludes="**/*.bak"/>
 	  <zipfileset dir="${lib}" prefix="lib" excludes="**/*.bak"/>
 	  <zipfileset dir="${sample}" prefix="sample" excludes="**/*.bak"/>
