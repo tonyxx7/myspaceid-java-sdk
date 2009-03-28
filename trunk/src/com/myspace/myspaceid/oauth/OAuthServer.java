@@ -205,9 +205,20 @@ public class OAuthServer {
 	/**
 	 * Does an HTTP request with customizable method type.
 	 * @param urlStr URL to send request to.
+	 * @param requestMethod
 	 * @return The response from the remote server.
 	 */
 	public String doHttpMethodReq(String urlStr, String requestMethod, String paramStr) {
+		return doHttpMethodReq(urlStr, requestMethod, paramStr, null);
+	}
+		
+	/**
+	 * Does an HTTP request with customizable method type.
+	 * @param urlStr URL to send request to.
+	 * @param header Header request properties to send.
+	 * @return The response from the remote server.
+	 */
+	public String doHttpMethodReq(String urlStr, String requestMethod, String paramStr, Map<String, String> header) {
 		StringBuffer sb = new StringBuffer();
 		try {
 			// Construct data
@@ -219,14 +230,22 @@ public class OAuthServer {
 			conn.setDoInput(true);
 			if (requestMethod != null)
 				conn.setRequestMethod(requestMethod);
+//System.out.println("&&&&& request method = " + conn.getRequestMethod());
 
-			conn.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-
+			if (header != null) {
+				for (String key : header.keySet()) {
+					conn.setRequestProperty(key, header.get(key));
+				}
+			}
+		
 //			conn.setRequestProperty("X-HTTP-Method-Override", "PUT"); // If use POST, must use this
-			
-			OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-			wr.write(paramStr);
-			wr.flush();
+
+			OutputStreamWriter wr = null;
+			if (requestMethod != null && !requestMethod.equals("GET")) {
+				wr = new OutputStreamWriter(conn.getOutputStream());
+				wr.write(paramStr);
+				wr.flush();
+			}
 		
 			// Get the response
 			BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -244,8 +263,10 @@ public class OAuthServer {
 				sb.append(line).append("\n");
 			} while (true);
 
-			wr.close();
-			br.close();
+			if (wr != null)
+				wr.close();
+			if (br != null)
+				br.close();
 		} catch (Exception e) {
 		}
 		String response = sb.toString();
