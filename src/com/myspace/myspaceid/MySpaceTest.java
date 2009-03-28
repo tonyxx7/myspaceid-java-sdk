@@ -439,7 +439,7 @@ public class MySpaceTest {
 		JSONObject obj = null;
 
 		printTitle("postStatus(String) with valid user id");
-		data = ms2.postStatus(id, "Hello World  又更新了状态 --  ~!@#$%^&*()_+{}:\"<>?`-=[];',./");
+		data = ms2.postStatus(id, "今天天气好 哈哈 --  ~!@#$%^&*()_+{}:\"<>?`-=[];',./");
 		out.println("postStatus(String) 1: '" + (String) data + "'");
 	}
 
@@ -583,7 +583,7 @@ public class MySpaceTest {
 		MySpaceTest.testGetActivitiesAtom();
 		MySpaceTest.testGetFriendsActivitiesAtom();
 */
-//		MySpaceTest.testPostStatus();
-		MySpaceTest.testPostMood();
+		MySpaceTest.testPostStatus();
+//		MySpaceTest.testPostMood();
 	}
 }

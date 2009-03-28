@@ -120,7 +120,7 @@ public class MySpace
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("oauth_token", requestToken.getKey()); // This needs to be populated from the outside!
 		String reqUrl = server.generateRequestUrl(OAUTH_ACCESS_TOKEN_URL, requestToken.getSecret(), map);
-System.out.println("+++++ " + reqUrl);
+//System.out.println("+++++ " + reqUrl);
 		String response = server.doHttpReq(reqUrl);
 		OAuthToken token = new OAuthToken(response);
 		return token;
@@ -535,11 +535,13 @@ System.out.println("+++++ " + reqUrl);
 		// status=Hello%20World%20%20%E7%BB%88%E4%BA%8E%E6%88%90%E5%8A%9F%E4%BA%86%EF%BC%81%21%21%20Can%20you%20believe%20that%20I%27m%20now%20posting%20status%20updates%20successfully%21%3F%20~%21%40%23%24%25%5E%26%2A%28%29_%2B%7B%7D%3A%22%3C%3E%3F%60-%3D%5B%5D%3B%27%2C.%2F
 		//
 
+		HashMap<String, String> headerMap = new HashMap<String, String>();
+		headerMap.put("Content-type", "application/x-www-form-urlencoded");
 		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), map, "PUT", putParam);
 		String response = null;
 		try
 		{
-			response = server.doHttpMethodReq(reqUrl, "PUT", putParam + "=" + OAuthServer.encode(putValue));
+			response = server.doHttpMethodReq(reqUrl, "PUT", putParam + "=" + OAuthServer.encode(putValue), headerMap);
 		}
 		catch (Exception e)
 		{
