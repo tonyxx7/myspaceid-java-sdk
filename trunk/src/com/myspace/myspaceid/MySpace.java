@@ -19,9 +19,13 @@ public class MySpace
 	protected static final String API_USERINFO_URL   = "http://api.myspace.com/v1/user.json";
 	protected static final String API_ALBUMS_URL     = "http://api.myspace.com/v1/users/%s/albums.json";
 	protected static final String API_ALBUM_URL      = "http://api.myspace.com/v1/users/%s/albums/%s/photos.json";
+	protected static final String API_ALBUMPHOTO_URL = "http://api.myspace.com/v1/users/%s/albums/%s/photos/%s.json";
+	protected static final String API_ALBUMINFO_URL  = "http://api.myspace.com/v1/users/%s/albums/%s.json";
 	protected static final String API_FRIENDS_URL    = "http://api.myspace.com/v1/users/%s/friends.json";
+	protected static final String API_FRIENDSLIST_URL = "http://api.myspace.com/v1/users/%s/friendslist/%s.json";
 	protected static final String API_FRIENDSHIP_URL = "http://api.myspace.com/v1/users/%s/friends/%s.json";
 	protected static final String API_MOOD_URL       = "http://api.myspace.com/v1/users/%s/mood.json";
+	protected static final String API_MOODS_URL      = "http://api.myspace.com/v1/users/%s/moods.json";
 	protected static final String API_PHOTOS_URL     = "http://api.myspace.com/v1/users/%s/photos.json";
 	protected static final String API_PHOTO_URL      = "http://api.myspace.com/v1/users/%s/photos/%s.json";
 	protected static final String API_PROFILE_URL    = "http://api.myspace.com/v1/users/%s/profile.json";
@@ -33,6 +37,19 @@ public class MySpace
 	protected static final String API_VIDEO_URL      = "http://api.myspace.com/v1/users/%s/videos/%s.json";
 	protected static final String API_ACTIVITIES_URL = "http://api.myspace.com/v1/users/%s/activities.atom";
 	protected static final String API_FRIENDSACTIVITIES_URL = "http://api.myspace.com/v1/users/%s/friends/activities.atom";
+	protected static final String API_GLOBAL_APP_DATA_URL	 = "http://api.myspace.com/v1/appdata/global.json";
+	protected static final String API_GLOBAL_APP_DATA_KEYS_URL	 = "http://api.myspace.com/v1/appdata/global/%s.json";
+	protected static final String API_GLOBAL_APP_DATA_XML_URL	 = "http://api.myspace.com/v1/appdata/global";
+	protected static final String API_GLOBAL_APP_DATA_KEYS_XML_URL	 = "http://api.myspace.com/v1/appdata/global/%s";
+	protected static final String API_APP_DATA_URL	 = "http://api.myspace.com/v1/users/%s/appdata.json";
+	protected static final String API_APP_DATA_KEYS_URL	 = "http://api.myspace.com/v1/users/%s/appdata/%s.json";
+	protected static final String API_APP_DATA_XML_URL	= "http://api.myspace.com/v1/users/%s/appdata";
+	protected static final String API_APP_DATA_KEYS_XML_URL	 = "http://api.myspace.com/v1/users/%s/appdata/%s";
+	protected static final String API_FRIENDS_APP_DATA_URL	 = "http://api.myspace.com/v1/users/%s/friends/appdata.json";
+	protected static final String API_FRIENDS_APP_DATA_KEYS_URL	 = "http://api.myspace.com/v1/users/%s/friends/appdata/%s.json";
+	protected static final String API_COMMENTS_URL   = "http://api.myspace.com/v1/users/%s/comments.json";
+	protected static final String API_INDICATORS_URL   = "http://api.myspace.com/v1/users/%s/indicators.json";
+	protected static final String API_PREFERENCES_URL   = "http://api.myspace.com/v1/users/%s/preferences.json";
 
 	// Member variables
 	protected OAuthConsumer consumer;
@@ -131,6 +148,159 @@ public class MySpace
     //
 
 	/**
+	 * Returns global app data for this app.
+	 * @return app data.
+	 */
+    public JSONObject getGlobalAppData() {
+		String url = API_GLOBAL_APP_DATA_URL;
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
+	 * Returns global app data for this app under the given keys.
+	 * @param keys semicolon-separated keys
+	 * @return Values fetched for the given keys
+	 */
+    public JSONObject getGlobalAppData(String keys) {
+		String url = API_GLOBAL_APP_DATA_KEYS_URL.replaceFirst("%s", keys);
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
+	 * Sets the given key-value pairs into the global app data.
+	 * @param appParams HashMap containing key-value pairs to store.
+	 * @return 
+	 */
+    public Object putGlobalAppData(Map<String, String> appParams) {
+		String url = API_GLOBAL_APP_DATA_XML_URL;
+		return putUserData(url, new HashMap<String, String>(), appParams);
+	}
+
+	/**
+	 * Sets the given key-value pairs into the global app data.
+	 * @param appParams HashMap containing key-value pairs to store.
+	 * @return 
+	 */
+    public Object clearGlobalAppData(String keys) {
+		String url = API_GLOBAL_APP_DATA_KEYS_XML_URL.replaceFirst("%s", keys);
+		return putUserData("DELETE", url, new HashMap<String, String>(), new HashMap<String, String>());
+	}
+
+	/**
+	 * Sets the given key-value pairs into a user's app data.
+	 * @param userId ID of user to retrieve app data for.
+	 * @param appParams HashMap containing key-value pairs to store.
+	 * @return 
+	 */
+    public Object putAppData(String userId, Map<String, String> appParams) {
+		requireAccessToken();
+		String url = API_APP_DATA_XML_URL.replaceFirst("%s", userId);
+		return putUserData(url, new HashMap<String, String>(), appParams);
+	}
+
+	/**
+	 * Returns app data for specified user.
+	 * @param userId ID of user to retrieve app data for.
+	 * @return app data of specified user
+	 */
+    public JSONObject getAppData(String userId) {
+		requireAccessToken();
+//		String url = API_APP_DATA_URL.replaceFirst("%s", userId);
+//		return getUserData(url, new HashMap<String, String>());
+		return getAppData(userId, null);
+	}
+
+	/**
+	 * Returns app data for specified user.
+	 * @param userId ID of user to retrieve app data for.
+	 * @param keys semicolon-separated keys
+	 * @return app data corresponding to given keys
+	 */
+    public JSONObject getAppData(String userId, String keys) {
+		requireAccessToken();
+		String url = null;
+		if (keys == null)
+			url = API_APP_DATA_URL.replaceFirst("%s", userId);
+		else
+			url = API_APP_DATA_KEYS_URL.replaceFirst("%s", userId).replaceFirst("%s", keys);
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+
+    /**
+	 * Sets the given key-value pairs into the global app data.
+	 * @param appParams HashMap containing key-value pairs to store.
+	 * @return 
+	 */
+    public Object clearAppData(String userId, String keys) {
+		requireAccessToken();
+		String url = API_APP_DATA_KEYS_XML_URL.replaceFirst("%s", userId).replaceFirst("%s", keys);
+		return putUserData("DELETE", url, new HashMap<String, String>(), new HashMap<String, String>());
+	}
+
+    //! To verify after server side is fixed
+    /**
+     * This apparently has a bug on the server side.
+	 * Returns app data for specified user's friends.
+	 * @param userId ID of user to retrieve app data for.
+	 * @return app data of specified user's friends
+	 */
+    public JSONArray getUserFriendsAppData(String userId) {
+		requireAccessToken();
+//		String url = API_APP_DATA_URL.replaceFirst("%s", userId);
+//		return getUserData(url, new HashMap<String, String>());
+		return getUserFriendsAppData(userId, null);
+	}
+
+    //! To test!
+	/**
+	 * This method is untested!
+	 * Returns app data for specified user's friends
+	 * @param userId ID of user to retrieve app data for.
+	 * @param keys semicolon-separated keys
+	 * @return app data corresponding to given keys
+	 */
+    public JSONArray getUserFriendsAppData(String userId, String keys) {
+		requireAccessToken();
+		String url = null;
+		if (keys == null)
+			url = API_FRIENDS_APP_DATA_URL.replaceFirst("%s", userId);
+		else
+			url = API_FRIENDS_APP_DATA_KEYS_URL.replaceFirst("%s", userId).replaceFirst("%s", keys);
+		return (JSONArray) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
+	 * Returns comments for a user.
+	 * @return comments for a user.
+	 */
+    public JSONObject getComments(String userId) {
+		requireAccessToken();
+		String url = API_COMMENTS_URL.replaceFirst("%s", userId);
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
+	 * Returns indicators for a user.
+	 * @return indicators for a user.
+	 */
+    public JSONObject getIndicators(String userId) {
+		requireAccessToken();
+		String url = API_INDICATORS_URL.replaceFirst("%s", userId);
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
+	 * Returns preferences for a user.
+	 * @return preferences for a user.
+	 */
+    public JSONObject getPreferences(String userId) {
+		requireAccessToken();
+		String url = API_PREFERENCES_URL.replaceFirst("%s", userId);
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
 	 * Returns the id of the user for whom we have an access token.
 	 * This method requires that the access token has been stored in its MySpace object.  Use the "mature" constructor that 
 	 * takes the access token key and secret as parameters.
@@ -184,7 +354,7 @@ public class MySpace
 		if (pageSize != -1)
 			map.put("page_size", String.valueOf(pageSize));
 		String url = API_ALBUMS_URL.replaceFirst("%s", userId);
-		return getUserData(url, map);
+		return (JSONObject) getUserData(url, map);
 	}
 
 	/**
@@ -199,7 +369,38 @@ public class MySpace
 		HashMap<String, String> map = new HashMap<String, String>();
 		String url = API_ALBUM_URL.replaceFirst("%s", userId);
 		url = url.replaceFirst("%s", Integer.toString(albumId));
-		return getUserData(url, map);
+		return (JSONObject) getUserData(url, map);
+	}
+
+	/**
+	 * Returns a photo in an album of the given user.
+	 * This method requires that the access token has been stored in its MySpace object.
+	 * @param userId ID of user to query.
+	 * @param albumId Which album.
+	 * @param photoId Which photo to return.
+	 * @return a photo in an album of the given user.
+	 */
+	public JSONObject getAlbumPhoto(String userId, int albumId, int photoId) {
+		requireAccessToken();
+		HashMap<String, String> map = new HashMap<String, String>();
+		String url = API_ALBUMPHOTO_URL.replaceFirst("%s", userId);
+		url = url.replaceFirst("%s", Integer.toString(albumId)).replaceFirst("%s", Integer.toString(photoId));
+		return (JSONObject) getUserData(url, map);
+	}
+
+	/**
+	 * Returns an album's info for the given user.
+	 * This method requires that the access token has been stored in its MySpace object.
+	 * @param userId ID of user to query.
+	 * @param albumId Which album to return.
+	 * @return an album's info for the given user.
+	 */
+	public JSONObject getAlbumInfo(String userId, int albumId) {
+		requireAccessToken();
+		HashMap<String, String> map = new HashMap<String, String>();
+		String url = API_ALBUMINFO_URL.replaceFirst("%s", userId);
+		url = url.replaceFirst("%s", Integer.toString(albumId));
+		return (JSONObject) getUserData(url, map);
 	}
 
 	/**
@@ -212,6 +413,20 @@ public class MySpace
 		return getFriends(userId, -1, -1, null, null);
 	}
 
+    protected void validateShowString(String show) throws MySpaceException {
+    	int i = 0;
+		String[] validShowValues = {"mood", "status", "online"};
+		if (show != null) {
+			String[] showParams = show.split("\\|");
+			for (int j = 0; j < showParams.length; j++) {
+//System.out.println("j = " + j + ", " + showParams[j]);
+				for (i = 0; i < validShowValues.length && !showParams[j].equals(validShowValues[i]); i++) {}
+				if (i == validShowValues.length)
+					throw new MySpaceException("Invalid value '" + showParams[j] + "' for show paramater.  Must be one of mood, status or online.");
+			}
+		}
+    }
+    
 	/**
 	 * Returns the friends of the given user.
 	 * This method requires that the access token has been stored in its MySpace object.
@@ -233,16 +448,7 @@ public class MySpace
 		if (i == validListValues.length)
 			throw new MySpaceException("Invalid value '" + list + "' for list paramater.  Must be one of top, online or app.");
 
-		String[] validShowValues = {"mood", "status", "online"};
-		if (show != null) {
-			String[] showParams = show.split("\\|");
-			for (int j = 0; j < showParams.length; j++) {
-//System.out.println("j = " + j + ", " + showParams[j]);
-				for (i = 0; i < validShowValues.length && !showParams[j].equals(validShowValues[i]); i++) {}
-				if (i == validShowValues.length)
-					throw new MySpaceException("Invalid value '" + showParams[j] + "' for show paramater.  Must be one of mood, status or online.");
-			}
-		}
+		validateShowString(show);
 
 		// Prep params and then send request
 		if (page != -1)
@@ -254,9 +460,39 @@ public class MySpace
 		if (show != null)
 			map.put("show", show);
 		String url = API_FRIENDS_URL.replaceFirst("%s", userId);
-		return getUserData(url, map);
+		return (JSONObject) getUserData(url, map);
 	}
 
+    /**
+     * Returns the specified friends of the given user.
+     * @param userId ID of user to query.
+     * @param friends List of friend ID's separated by semicolons.
+     * @return the specified friends of the given user.
+     */
+    public JSONObject getFriendsList(String userId, String friends) {
+    	return getFriendsList(userId, friends, null);
+    }
+    
+    /**
+     * Returns the specified friends of the given user.
+     * @param userId ID of user to query.
+     * @param friends List of friend ID's separated by semicolons.
+     * @param show can be a combination of 'mood', 'status', 'online' separated by '|'.  Do not put spaces in this string.
+     * @return the specified friends of the given user.
+     */
+    public JSONObject getFriendsList(String userId, String friends, String show) {
+		requireAccessToken();
+		HashMap<String, String> map = new HashMap<String, String>();
+
+		validateShowString(show);
+
+		// Prep params and then send request
+		if (show != null)
+			map.put("show", show);
+		String url = API_FRIENDSLIST_URL.replaceFirst("%s", userId).replaceFirst("%s", friends);
+		return (JSONObject) getUserData(url, map);
+    }
+    
 	/**
 	 * Returns the friendship of the given user with other users.
 	 * This method requires that the access token has been stored in its MySpace object.
@@ -267,19 +503,31 @@ public class MySpace
 	public JSONObject getFriendship(String userId, String friendIds) {
 		requireAccessToken();
 		String url = API_FRIENDSHIP_URL.replaceFirst("%s", userId).replaceFirst("%s", friendIds);
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
 	}
 
 	/**
 	 * Returns the mood of the given user.
 	 * This method requires that the access token has been stored in its MySpace object.
 	 * @param userId ID of user to query.
-	 * @return the friendship of the given user with other users.
+	 * @return the mood of the given user.
 	 */
     public JSONObject getMood(String userId) {
 		requireAccessToken();
 		String url = API_MOOD_URL.replaceFirst("%s", userId);
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
+	 * Returns the moods available to the given user.
+	 * This method requires that the access token has been stored in its MySpace object.
+	 * @param userId ID of user to query.
+	 * @return the moods available to the given user.
+	 */
+    public JSONObject getMoods(String userId) {
+		requireAccessToken();
+		String url = API_MOODS_URL.replaceFirst("%s", userId);
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
 	}
 
 	/**
@@ -298,7 +546,7 @@ public class MySpace
 		if (pageSize != -1)
 			map.put("page_size", String.valueOf(pageSize));
 		String url = API_PHOTOS_URL.replaceFirst("%s", userId);
-		return getUserData(url, map);
+		return (JSONObject) getUserData(url, map);
 	}
 
 	/**
@@ -311,7 +559,7 @@ public class MySpace
     public JSONObject getPhoto(String userId, int photoId) {
 		requireAccessToken();
 		String url = API_PHOTO_URL.replaceFirst("%s", userId).replaceFirst("%s", String.valueOf(photoId));
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
 	}
 
 	/**
@@ -336,7 +584,7 @@ public class MySpace
 		String url = API_PROFILE_URL.replaceFirst("%s", userId);
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("detailtype", detailType);
-		return getUserData(url, map);
+		return (JSONObject) getUserData(url, map);
 	} 
  
 	/**
@@ -348,7 +596,49 @@ public class MySpace
     public JSONObject getStatus(String userId) {
 		requireAccessToken();
 		String url = API_STATUS_URL.replaceFirst("%s", userId);
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
+	}
+
+	/**
+	 * Posts a status update.
+	 * @param userId ID of user to query.
+	 * @param Status update to post.
+	 * @return the return string from the server.
+	 * @deprecated Please use {@link #setStatus}
+	 */
+    @Deprecated public Object postStatus(String userId, String status) {
+		requireAccessToken();
+		String url = API_PUT_STATUS_URL.replaceFirst("%s", userId);
+		HashMap<String, String> map = new HashMap<String, String>();
+		HashMap<String, String> appParams = new HashMap<String, String>();
+		appParams.put("status", status);
+		return putUserData(url, map, appParams);
+	}
+	
+	/**
+	 * Posts a mood update.
+	 * @param userId ID of user to query.
+	 * @param mood update to post.
+	 * @return the return string from the server.
+	 * @deprecated Please use {@link #setMood}
+	 */
+    @Deprecated public Object postMood(String userId, int mood) {
+		requireAccessToken();
+		String url = API_PUT_MOOD_URL.replaceFirst("%s", userId);
+		HashMap<String, String> map = new HashMap<String, String>();
+		HashMap<String, String> appParams = new HashMap<String, String>();
+		appParams.put("mood", "" + mood);
+		return putUserData(url, map, appParams);
+	}
+
+	/**
+	 * Posts a mood update.
+	 * @param userId ID of user to query.
+	 * @param mood update to post.
+	 * @return the return string from the server.
+	 */
+	public Object setMood(String userId, int mood) {
+		return postMood(userId, mood);
 	}
 
 	/**
@@ -357,24 +647,8 @@ public class MySpace
 	 * @param Status update to post.
 	 * @return the return string from the server.
 	 */
-    public Object postStatus(String userId, String status) {
-		requireAccessToken();
-		String url = API_PUT_STATUS_URL.replaceFirst("%s", userId);
-		HashMap<String, String> map = new HashMap<String, String>();
-		return putUserData(url, map, "status", status);
-	}
-	
-	/**
-	 * Posts a mood update.
-	 * @param userId ID of user to query.
-	 * @param mood update to post.
-	 * @return the return string from the server.
-	 */
-    public Object postMood(String userId, int mood) {
-		requireAccessToken();
-		String url = API_PUT_MOOD_URL.replaceFirst("%s", userId);
-		HashMap<String, String> map = new HashMap<String, String>();
-		return putUserData(url, map, "mood", "" + mood);
+    public Object setStatus(String userId, String status) {
+		return postStatus(userId, status);
 	}
 
 	/**
@@ -386,7 +660,7 @@ public class MySpace
     public JSONObject getFriendsStatus(String userId) {
 		requireAccessToken();
 		String url = API_FRIENDS_STATUS_URL.replaceFirst("%s", userId);
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
 	}
 
 	
@@ -399,7 +673,7 @@ public class MySpace
     public JSONObject getVideos(String userId) {
 		requireAccessToken();
 		String url = API_VIDEOS_URL.replaceFirst("%s", userId);
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
 	}
 
 	/**
@@ -412,7 +686,7 @@ public class MySpace
     public JSONObject getVideo(String userId, int videoId) {
 		requireAccessToken();
 		String url = API_VIDEO_URL.replaceFirst("%s", userId).replaceFirst("%s", String.valueOf(videoId));
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
 	}
 
 	/**
@@ -423,7 +697,7 @@ public class MySpace
 	public JSONObject getUser() {
 		requireAccessToken();
 		String url = API_USERINFO_URL;
-		return getUserData(url, new HashMap<String, String>());
+		return (JSONObject) getUserData(url, new HashMap<String, String>());
 	}
 
 	/**
@@ -484,14 +758,14 @@ public class MySpace
 	 * @param map HashMap of additional parameters to send that are specific to this request
 	 * @return user data in a {@link UserData} object.
 	 */
-	protected JSONObject getUserData(String url, HashMap<String, String> map) {
+	protected Object getUserData(String url, HashMap<String, String> map) {
 		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), map);
 		String response = server.doHttpReq(reqUrl);
 		JSONParser parser = new JSONParser();
-		JSONObject obj = null;
+		Object obj = null;
 		try
 		{
-			obj = (JSONObject) parser.parse(response);
+			obj = parser.parse(response);
 		}
 		catch (ParseException e)
 		{
@@ -512,11 +786,19 @@ public class MySpace
 	 * @param putValue Value of parameter to put
 	 * @return user data in a {@link UserData} object.
 	 */
-	protected Object putUserData(String url, HashMap<String, String> map, String putParam, String putValue) {
-		if (putParam == null || putValue == null)
-			throw new MySpaceException("Put parameter or value cannot be null.");
+	 //! Change putParam and putValue to a single hashmap
+//	protected Object putUserData(String url, HashMap<String, String> map, String putParam, String putValue) {
+	protected Object putUserData(String url, HashMap<String, String> map, Map<String, String> appParams) {
+		return putUserData("PUT", url, map, appParams);
+	}
 
-		map.put(putParam, putValue); 
+	protected Object putUserData(String method, String url, HashMap<String, String> map, Map<String, String> appParams) {
+
+//		if (putParam == null || putValue == null)
+//			throw new MySpaceException("Put parameter or value cannot be null.");
+
+		if (appParams != null)
+			map.putAll(appParams);
 		
 		//
 		// Note: for signing, the base string has to include the value being put, but the value is 
@@ -537,11 +819,14 @@ public class MySpace
 
 		HashMap<String, String> headerMap = new HashMap<String, String>();
 		headerMap.put("Content-type", "application/x-www-form-urlencoded");
-		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), map, "PUT", putParam);
+//		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), map, "PUT", putParam);
+		String reqUrl = server.generateRequestUrl(url, accessToken == null ? "" : accessToken.getSecret(), map, method, appParams.keySet());
 		String response = null;
 		try
 		{
-			response = server.doHttpMethodReq(reqUrl, "PUT", putParam + "=" + OAuthServer.encode(putValue), headerMap);
+//			String bodyStr = putParam == null ? "" : putParam + "=" + OAuthServer.encode(putValue);
+			String bodyStr = OAuthServer.buildParams(appParams);
+			response = server.doHttpMethodReq(reqUrl, method, bodyStr, headerMap);
 		}
 		catch (Exception e)
 		{

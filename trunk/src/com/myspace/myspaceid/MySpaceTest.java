@@ -11,19 +11,68 @@ import com.myspace.myspaceid.oauth.*;
 // Run using account kiammyspace
 public class MySpaceTest {
 	private static String id = null;
+	private static MySpace ms = null;
 	private static MySpace ms2 = null;
 	private static PrintStream out = System.err;
 	
+	// Account that works with this test: kiammyspace/myspace888
+	private static String key = "77f44916a5144c97ad1ddc9ec53338cc";
+	private static String secret = "51951d1f872c454d8932cd5f135623ae";
+
 	public static void setUp() throws Exception {
 		// Initialize
 		System.out.println("Initializing user ID");
 
-		// Account that works with this test: kiammyspace/myspace888
 
-		String key = "77f44916a5144c97ad1ddc9ec53338cc";
-		String secret = "51951d1f872c454d8932cd5f135623ae";
 
-		MySpace ms = new MySpace(key, secret, ApplicationType.OFF_SITE);
+		ms = new MySpace(key, secret, ApplicationType.OFF_SITE);
+	}
+
+	public static void testPutGlobalAppData() {
+		printTitle("testPutGlobalAppData(Map)");
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("animal", "cat");
+		map.put("plant", "rose");
+		Object appData = ms.putGlobalAppData(map);
+
+		out.println("testPutGlobalAppData(Map) 1: " + appData);
+	}
+
+	public static void testGetGlobalAppData() {
+		printTitle("testGetGlobalAppData()");
+		JSONObject appData = ms.getGlobalAppData();
+
+		out.println("testGetGlobalAppData() 1: " + appData);
+	}
+
+	public static void testGetGlobalAppData2() {
+		printTitle("testGetGlobalAppData2()");
+		JSONObject appData = ms.getGlobalAppData("animal;plant;name");
+
+		out.println("testGetGlobalAppData2() 1: " + appData);
+	}
+
+	public static void testClearGlobalAppData() {
+		printTitle("testClearGlobalAppData()");
+		Object appData = ms.clearGlobalAppData("animal;plant");
+
+		out.println("testClearGlobalAppData() 1: " + appData);
+	}
+
+	public static void globalTests() throws Exception {
+		testPutGlobalAppData();
+		
+		// Put data may become available only after a delay, so sleep first
+		Thread.sleep(1000);
+		
+		testGetGlobalAppData();
+		testGetGlobalAppData2();
+		testClearGlobalAppData();
+		testGetGlobalAppData();
+	}
+
+	public static void setUp2() throws Exception {
+		
 		OAuthToken token = ms.getRequestToken();
 		System.out.println(token);
 
@@ -35,6 +84,7 @@ public class MySpaceTest {
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader(isr);
 		String newTokenKey = br.readLine();
+		newTokenKey = URLDecoder.decode(newTokenKey);
 		System.out.println();
 //		System.out.println("Using new token: " + newTokenKey);
 
@@ -131,6 +181,27 @@ public class MySpaceTest {
 		}
 	}
 
+	public static void testGetAlbumPhoto() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		// Fetch album id to use
+		data = ms2.getAlbums(id, -1, -1); // First get an album id to use
+		JSONArray albums = (JSONArray) data.get("albums");
+		Long idLong = (Long) ((JSONObject) albums.get(0)).get("id");
+		int albumId = idLong.intValue(); // Got the album id!  Now use it...
+		
+		// Fetch photo id to use
+		data = ms2.getAlbum(id, albumId);
+		JSONArray photos = (JSONArray) data.get("photos");
+		idLong = (Long) ((JSONObject) photos.get(0)).get("id");
+		int photoId = idLong.intValue();
+		
+		printTitle("getAlbumPhoto(String, int, int) with valid user id, valid album id and valid photo id");
+		data = ms2.getAlbumPhoto(id, albumId, photoId);
+		out.println("getAlbumPhoto(String, int, int) 1: " + data);
+	}
+	
 	public static void testGetAlbum() {
 		JSONObject data = null;
 		JSONObject obj = null;
@@ -152,7 +223,7 @@ public class MySpaceTest {
 		}
 		catch (Exception e)
 		{
-			out.println("Exception occurred with getAlbums(String, int, int) 2nd test");
+			out.println("Exception occurred with getAlbum(String, int) 2nd test");
 		}
 
 		printTitle("getAlbum(String, int) with invalid user id and valid album id");
@@ -163,7 +234,43 @@ public class MySpaceTest {
 		}
 		catch (Exception e)
 		{
-			out.println("Exception occurred with getAlbums(String, int, int) 3rd test");
+			out.println("Exception occurred with getAlbum(String, int) 3rd test");
+		}
+	}
+
+	public static void testGetAlbumInfo() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		data = ms2.getAlbums(id, -1, -1); // First get an album id to use
+		JSONArray albums = (JSONArray) data.get("albums");
+		Long idLong = (Long) ((JSONObject) albums.get(0)).get("id");
+		int albumId = idLong.intValue(); // Got the album id!  Now use it...
+		
+		printTitle("getAlbumInfo(String, int) with valid user id and valid album id");
+		data = ms2.getAlbumInfo(id, albumId);
+		out.println("getAlbumInfo(String, int) 1: " + data);
+
+		printTitle("getAlbumInfo(String, int) with valid user id and invalid album id");
+		try
+		{
+			data = ms2.getAlbumInfo(id, -1111);
+			out.println("getAlbumInfo(String, int) 2: " + data);
+		}
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getAlbumInfo(String, int) 2nd test");
+		}
+
+		printTitle("getAlbumInfo(String, int) with invalid user id and valid album id");
+		try
+		{
+			data = ms2.getAlbumInfo("-1", albumId);
+			out.println("getAlbumInfo(String, int) 3: " + data);
+		}
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getAlbumInfo(String, int) 3rd test");
 		}
 	}
 
@@ -248,6 +355,69 @@ public class MySpaceTest {
 		}
 	}
 
+
+	public static void testGetFriendsList() {
+		JSONObject data = null;
+		JSONObject obj = null;
+		String friends = "6221;457099758;36452044";
+		String invalidFriends = "6221;457099758;100";
+
+		// First test with valid id
+		printTitle("getFriendsList(String, String) with valid user id");
+		data = ms2.getFriendsList(id, friends);
+		out.println("getFriendsList(String, String) 1: " + data);
+
+		// 2nd test with invalid id but valid friends
+		printTitle("getFriendsList(String, String) with invalid user id 100");
+		try
+		{
+			data = ms2.getFriendsList("100", friends);
+			out.println("getFriendsList(String, String) 2: " + data);
+		}
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getFriendsList(String, String) 2nd test");
+		}
+
+		// 3rd test with invalid id but invalid friends
+		printTitle("getFriendsList(String, String) with invalid friend id 100");
+		try
+		{
+			data = ms2.getFriendsList(id, invalidFriends);
+			out.println("getFriendsList(String, String) 3: " + data);
+		}
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getFriendsList(String, String) 3rd test");
+		}
+	}
+	
+	public static void testGetFriendsList2() {
+		JSONObject data = null;
+		JSONObject obj = null;
+		String friends = "6221;457099758;36452044";
+		String invalidFriends = "6221;457099758;100";
+		String show = "mood|status|online";
+		String invalidShow = "mood|status|onlinewrongstring";
+
+		// 1st test with valid show string
+		printTitle("getFriendsList(String, String, String) with valid user id");
+		data = ms2.getFriendsList(id, friends, show);
+		out.println("getFriendsList(String, String, String) 1: " + data);
+		
+		// 2nd test with invalid show string
+		printTitle("getFriendsList(String, String, String) with invalid show string");
+		try
+		{
+			data = ms2.getFriendsList(id, friends, invalidShow);
+			out.println("getFriendsList(String, String, String) 2: " + data);
+		}
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getFriendsList(String, String, String) 2nd test");
+		}
+	}
+
 	public static void testGetFriendship() {
 		// getFriendship(userId, friendIds)
 		//  - test with valid id, valid friend id
@@ -281,7 +451,32 @@ public class MySpaceTest {
 			out.println("Exception occurred with getFriends(String) 2nd test");
 		}
 	}
-	
+
+	public static void testGetMoods() {
+		// getMoods(userId) 
+		//  - test with valid id
+		//  - test invalid id
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		// First test with valid id
+		printTitle("getMoods(String) with valid user id");
+		data = ms2.getMoods(id);
+		out.println("getMoods(String) 1: " + data);
+
+		// 2nd test with invalid id
+		printTitle("getMoods(String) with invalid user id 100");
+		try
+		{
+			data = ms2.getMoods("100");
+			out.println("getMoods(String) 2: " + data);
+		}
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getMoods(String) 2nd test");
+		}
+	}
+
 	public static void testGetMood() {
 		// getMood(userId) 
 		//  - test with valid id
@@ -439,7 +634,8 @@ public class MySpaceTest {
 		JSONObject obj = null;
 
 		printTitle("postStatus(String) with valid user id");
-		data = ms2.postStatus(id, "今天天气好 哈哈 --  ~!@#$%^&*()_+{}:\"<>?`-=[];',./");
+//		data = ms2.postStatus(id, "abcdef 今天天气好 哈哈 --  ~!@#$%^&*()_+{}:\"<>?`-=[];',./");
+		data = ms2.postStatus(id, "what a rainy day");
 		out.println("postStatus(String) 1: '" + (String) data + "'");
 	}
 
@@ -448,7 +644,7 @@ public class MySpaceTest {
 		JSONObject obj = null;
 
 		printTitle("postStatus(String) with valid user id");
-		data = ms2.postMood(id, 1);
+		data = ms2.postMood(id, 3);
 		out.println("postMood(String) 1: '" + (String) data + "'");
 	}
 
@@ -560,17 +756,131 @@ public class MySpaceTest {
 		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
 		System.out.println("getFriendsActivitiesAtom(String) 1: " + activities);
 	}
+	
+	public static void testPutAppData() {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("solid", "carbon");
+		map.put("liquid", "mercury");
+		map.put("gas", "helium");
+
+		printTitle("putAppData()");
+		Object data = ms2.putAppData(id, map);
+		out.println("putAppData() 1: " + data);
+	}
+
+	public static void testGetAppData() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		printTitle("getAppData()");
+		data = ms2.getAppData(id);
+		out.println("getAppData() 1: " + data);
+	}
+
+	public static void testGetAppData2() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		printTitle("getAppData2()");
+		data = ms2.getAppData(id, "solid;liquid");
+		out.println("getAppData2() 1: " + data);
+	}
+
+	public static void testClearAppData() {
+		Object data = null;
+
+		printTitle("clearAppData()");
+		data = ms2.clearAppData(id, "solid;liquid");
+		out.println("clearAppData() 1: " + data);
+	}
+
+	public static void testGetFriendsAppData() throws Exception {
+		String key = "http://perisphere.1939worldsfair.com/app.xml";
+		String secret = "eda0c62773234093bea92645eea0493d";
+			
+		JSONArray data = null;
+//		JSONObject data = null;
+
+		ms = new MySpace(key, secret, ApplicationType.ON_SITE);
+
+		// First put something
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("colour", "red");
+		map.put("flavour", "spicy");
+		ms.putAppData("146617378", map);
+		Thread.sleep(1000);
+		
+		printTitle("getFriendsAppData(String) 1");
+//		data = ms.getFriendsAppData("146617378");
+		data = ms.getUserFriendsAppData("28568917");
+//		data = ms.getFriendsAppData("456073223");
+		out.println("getFriendsAppData() 1: " + data);
+
+		printTitle("getFriendsAppData(String, String) 1");
+		data = ms.getUserFriendsAppData("28568917", "colour");
+		out.println("getFriendsAppData(String, String) 1: " + data);
+
+		printTitle("getFriendsAppData(String, String) 2");
+		data = ms.getUserFriendsAppData("28568917", "colour;flavour");
+		out.println("getFriendsAppData(String, String) 2: " + data);
+	}
+
+/*
+	public static void testFriendsGetAppData2() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		printTitle("getAppData2()");
+		data = ms2.getAppData(id, "solid;liquid");
+		out.println("getAppData2() 1: " + data);
+	}
+*/
+
+	public static void testGetComments() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		printTitle("getComments()");
+		data = ms2.getComments(id);
+		out.println("getComments() 1: " + data);
+	}
+
+	public static void testGetIndicators() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		printTitle("getIndicators()");
+		data = ms2.getIndicators(id);
+		out.println("getIndicators() 1: " + data);
+	}
+
+	public static void testGetPreferences() {
+		JSONObject data = null;
+		JSONObject obj = null;
+
+		printTitle("getPreferences()");
+		data = ms2.getPreferences(id);
+		out.println("getPreferences() 1: " + data);
+	}
 
 	public static void main(String[] args) throws Exception {
+		MySpaceTest.testGetFriendsAppData();
 		MySpaceTest.setUp();
-/*
+		MySpaceTest.globalTests();
+		MySpaceTest.setUp2();
+
 		MySpaceTest.testGetAlbums();
 		MySpaceTest.testGetAlbums2();
 		MySpaceTest.testGetAlbum();
+		MySpaceTest.testGetAlbumInfo();
+		MySpaceTest.testGetAlbumPhoto();
 		MySpaceTest.testGetFriends();
 		MySpaceTest.testGetFriends2();
+		MySpaceTest.testGetFriendsList();
+		MySpaceTest.testGetFriendsList2();
 		MySpaceTest.testGetFriendship();
 		MySpaceTest.testGetMood();
+		MySpaceTest.testGetMoods();
 		MySpaceTest.testGetPhotos();
 		MySpaceTest.testGetPhoto();
 		MySpaceTest.testGetProfile();
@@ -582,8 +892,37 @@ public class MySpaceTest {
 		MySpaceTest.testGetUser();
 		MySpaceTest.testGetActivitiesAtom();
 		MySpaceTest.testGetFriendsActivitiesAtom();
-*/
+
+
+		MySpaceTest.testPutAppData();
+		// Put data may become available only after a delay, so sleep first
+		Thread.sleep(1000);
+		MySpaceTest.testGetAppData();
+		MySpaceTest.testGetAppData2();
+		MySpaceTest.testClearAppData();
+		Thread.sleep(1000);
+		MySpaceTest.testGetAppData(); // Fetch again to verify deletion
+
+		MySpaceTest.testGetIndicators();
+
 		MySpaceTest.testPostStatus();
-//		MySpaceTest.testPostMood();
+		MySpaceTest.testPostMood();
+
+/*	
+		JSONObject data = ms2.getAlbums(id, -1, -1); // First get an album id to use
+		JSONArray albums = (JSONArray) data.get("albums");
+		Long idLong = (Long) ((JSONObject) albums.get(0)).get("id");
+		int albumId = idLong.intValue(); // Got the album id!  Now use it...
+
+		HashMap<String, String> map = new HashMap<String, String>();
+		String x = "http://api.myspace.com/v1/users/%s/albums/%s/photos.xml";
+		String url = x.replaceFirst("%s", id);
+		url = url.replaceFirst("%s", Integer.toString(albumId));
+
+		String reqUrl = ms2.server.generateRequestUrl(url, ms2.accessToken == null ? "" : ms2.accessToken.getSecret(), map);
+		String response = ms2.server.doHttpReq(reqUrl);
+	
+		System.out.println(response);
+*/
 	}
 }
