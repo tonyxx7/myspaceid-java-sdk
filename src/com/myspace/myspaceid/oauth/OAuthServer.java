@@ -61,7 +61,13 @@ public class OAuthServer {
 	 * @param removeParam If not null, removes entry with this key from args Map so it does not appear in the final URL, but is still used in the base string.
 	 * @return The URL generated.
 	 */
-	public String generateRequestUrl(String path, String tokenSecret, Map<String, String> args, String method, String removeParam) {
+	 //! Change removeParam to a Set (pass in key set from hashmap)
+//	public String generateRequestUrl(String path, String tokenSecret, Map<String, String> args, String method, String removeParam) {
+//		HashSet<String> removeParamsSet = new HashSet<String>();
+//		return generateRequestUrl(path, tokenSecret, args, method, removeParamsSet);
+//	}
+
+	public String generateRequestUrl(String path, String tokenSecret, Map<String, String> args, String method, Set<String> removeParams) {
         long randomNum = new Random().nextLong();
         long timestamp = (long) System.currentTimeMillis()/1000;
         args.put("oauth_consumer_key", consumer.getKey());
@@ -84,8 +90,12 @@ public class OAuthServer {
 //System.out.println("$$$$$$$$$$$$ base string " + baseString);
 
 		// Compose actual resulting URL
-		if (removeParam != null) // If requested, remove a specified parameter; used for putting
-			args.remove(removeParam);
+		if (removeParams != null) { // If requested, remove specified parameters; used for putting
+			for (String key : removeParams) {
+				args.remove(key);
+			}
+		}
+
 		String params = buildParams(args);
 		
 		String result = part2+"?"+params+"&oauth_signature="+encode(sig);
@@ -94,11 +104,11 @@ public class OAuthServer {
     }
 
 	/**
-	 * Build parameters as a string from Map.
+	 * Build parameters as a string from Map.  Parameters are sorted.
 	 * @param args parameters
 	 * @return URL parameters in string form.
 	 */
-	protected String buildParams(Map<String, String> args) {
+	public static String buildParams(Map<String, String> args) {
         List<String> argList = new ArrayList<String>();
         for (String key : args.keySet()) {
             String arg = key+"="+encode(args.get(key));
@@ -241,7 +251,7 @@ public class OAuthServer {
 //			conn.setRequestProperty("X-HTTP-Method-Override", "PUT"); // If use POST, must use this
 
 			OutputStreamWriter wr = null;
-			if (requestMethod != null && !requestMethod.equals("GET")) {
+			if (requestMethod != null && !requestMethod.equals("GET") && !requestMethod.equals("DELETE")) {
 				wr = new OutputStreamWriter(conn.getOutputStream());
 				wr.write(paramStr);
 				wr.flush();
@@ -268,6 +278,9 @@ public class OAuthServer {
 			if (br != null)
 				br.close();
 		} catch (Exception e) {
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			throw new MySpaceException(sw.toString(), MySpaceException.REMOTE_ERROR);
 		}
 		String response = sb.toString();
 		return response;
