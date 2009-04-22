@@ -24,19 +24,23 @@
 	response.sendRedirect(authorizeUrl);
   }
   else {
-    // Callback invoked.  Authorization done.  Display user info.
-	String newTokenKey = request.getParameter("oauth_token");
-	System.out.println("Using new token: " + newTokenKey);
-
-	// To get access token, use the new request token returned in the Callback URL, and use the secret returned with the original request token.
-	String requestTokenSecret = (String) request.getSession().getAttribute("requestTokenSecret");
-	OAuthToken token2 = new OAuthToken(newTokenKey, requestTokenSecret);
-	OAuthToken accessToken = ms.getAccessToken(token2);
-
-	// Now that we have the access token, create a MySpace object using the "mature" constructor (with 4 arguments).  
-	// This object lets us fetch user data.
-	MySpace ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, accessToken.getKey(), accessToken.getSecret());
-
+	// Check if final MySpace object already available
+	MySpace ms2 = (MySpace) request.getSession().getAttribute("ms2");
+	if (ms2 == null) {
+		// Callback has just been invoked from MySpace after authorization.
+		String newTokenKey = request.getParameter("oauth_token");
+		System.out.println("Using new token: " + newTokenKey);
+	
+		// To get access token, use the new request token returned in the Callback URL, and use the secret returned with the original request token.
+		String requestTokenSecret = (String) request.getSession().getAttribute("requestTokenSecret");
+		OAuthToken token2 = new OAuthToken(newTokenKey, requestTokenSecret);
+		OAuthToken accessToken = ms.getAccessToken(token2);
+	
+		// Now that we have the access token, create a MySpace object using the "mature" constructor (with 4 arguments).  
+		// This object lets us fetch user data.
+		ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, accessToken.getKey(), accessToken.getSecret());
+	}
+	
 	// Fetch and display user ID.
 	String id = ms2.getUserId();
 	out.println("<br/><br/>User id = " + id + "<br/>");
