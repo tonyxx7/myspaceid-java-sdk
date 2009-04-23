@@ -39,6 +39,7 @@
 		// Now that we have the access token, create a MySpace object using the "mature" constructor (with 4 arguments).  
 		// This object lets us fetch user data.
 		ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, accessToken.getKey(), accessToken.getSecret());
+		request.getSession().setAttribute("ms2", ms2);
 	}
 	
 	// Fetch and display user ID.
