@@ -25,8 +25,9 @@
   }
   else {
 	// Check if final MySpace object already available
-	MySpace ms2 = (MySpace) request.getSession().getAttribute("ms2");
-	if (ms2 == null) {
+	String accessTokenKey = (String) request.getSession().getAttribute("accessTokenKey");
+	String accessTokenSecret = (String) request.getSession().getAttribute("accessTokenSecret");
+	if (accessTokenKey == null || accessTokenSecret == null) {
 		// Callback has just been invoked from MySpace after authorization.
 		String newTokenKey = request.getParameter("oauth_token");
 		System.out.println("Using new token: " + newTokenKey);
@@ -35,13 +36,18 @@
 		String requestTokenSecret = (String) request.getSession().getAttribute("requestTokenSecret");
 		OAuthToken token2 = new OAuthToken(newTokenKey, requestTokenSecret);
 		OAuthToken accessToken = ms.getAccessToken(token2);
+		
+		accessTokenKey = accessToken.getKey();
+		accessTokenSecret = accessToken.getSecret();
 	
-		// Now that we have the access token, create a MySpace object using the "mature" constructor (with 4 arguments).  
-		// This object lets us fetch user data.
-		ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, accessToken.getKey(), accessToken.getSecret());
-		request.getSession().setAttribute("ms2", ms2);
+		request.getSession().setAttribute("accessTokenKey", accessTokenKey);
+		request.getSession().setAttribute("accessTokenSecret", accessTokenSecret);
 	}
-	
+
+	// Now that we have the access token, create a MySpace object using the "mature" constructor (with 4 arguments).  
+	// This object lets us fetch user data.
+	MySpace ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, accessTokenKey, accessTokenSecret);
+
 	// Fetch and display user ID.
 	String id = ms2.getUserId();
 	out.println("<br/><br/>User id = " + id + "<br/>");
