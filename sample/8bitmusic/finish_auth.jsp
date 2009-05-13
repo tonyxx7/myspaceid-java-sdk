@@ -11,7 +11,7 @@ String CONSUMER_SECRET = "2e8ebdafbef844a5929086e659e4188c";
 
 // Get access token
 OAuthToken token2 = new OAuthToken(request.getParameter("openid.oauth.request_token"), "");
-OAuthToken accessToken = new MySpace(CONSUMER_KEY, CONSUMER_SECRET).getAccessToken(token2);
+OAuthToken accessToken = new OffsiteContext(CONSUMER_KEY, CONSUMER_SECRET, token2.getKey(), token2.getSecret()).getAccessToken();
 request.getSession().setAttribute("accessToken", accessToken);
 %>
 <html>

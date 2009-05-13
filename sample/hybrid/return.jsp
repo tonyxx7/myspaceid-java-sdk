@@ -16,20 +16,27 @@
 
 	// Callback invoked.  Authorization done.  Display user info.
 	// Unlike the OAuth case, getting the access token doesn't require a new secret.
-	OAuthToken token2 = new OAuthToken(request.getParameter("openid.oauth.request_token"), "");
-    MySpace ms = new MySpace(key, secret);
-	OAuthToken accessToken = ms.getAccessToken(token2);
-
-	// Now that we have the access token, create a MySpace object using the "mature" constructor (with 4 arguments).  
-	// This object lets us fetch user data.
-	MySpace ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, accessToken.getKey(), accessToken.getSecret());
+	OffsiteContext c = null;
+	String accessTokenKey = (String) request.getSession().getAttribute("accessTokenKey");
+	String accessTokenSecret = (String) request.getSession().getAttribute("accessTokenSecret");
+	if (accessTokenKey == null || accessTokenSecret == null) {
+		c = new OffsiteContext(key, secret, request.getParameter("openid.oauth.request_token"), "");
+		OAuthToken accessToken = c.getAccessToken();
+		request.getSession().setAttribute("accessTokenKey", accessToken.getKey());
+		request.getSession().setAttribute("accessTokenSecret", accessToken.getSecret());
+	}
+	else {
+		c = new OffsiteContext(key, secret);
+		c.setAccessToken(new OAuthToken(accessTokenKey, accessTokenSecret));
+	}
 
 	// Fetch and display user ID.
-	String id = ms2.getUserId();
+	String id = c.getUserId();
 	out.println("User id = " + id + "<br/>");
 
 	// Fetch and display user's name.
-	JSONObject friends = ms2.getFriends(id);
+	RestV1 r = new RestV1(c);
+	JSONObject friends = r.getFriends(id);
 	JSONObject obj = (JSONObject) friends.get("user");
 	out.println("<h2>" + obj.get("name") + "'s friends:</h2>");
 
