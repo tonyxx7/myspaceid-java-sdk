@@ -47,17 +47,19 @@ if(isLoggedin(request) && request.getParameter("newrun") == null){
 	OAuthToken accessToken = (OAuthToken) request.getSession().getAttribute("accessToken");
 
 	//create new myspace object to make requests.
-	MySpace ms = new MySpace(CONSUMER_KEY,CONSUMER_SECRET,ApplicationType.OFF_SITE,accessToken.getKey(),accessToken.getSecret());
-	String userid = ms.getUserId();
-	
+	OffsiteContext c = new OffsiteContext(CONSUMER_KEY, CONSUMER_SECRET);
+	c.setAccessToken(new OAuthToken(accessToken.getKey(), accessToken.getSecret()));
+	String userid = c.getUserId();
+
 	// Use the userID (fetched in the previous step) to get user's profile, friends and other info
-	profile_ext_data = ms.getProfile(userid, "extended");
-	profile_data = ms.getProfile(userid);
+	RestV1 r = new RestV1(c);
+	profile_ext_data = r.getProfile(userid, "extended");
+	profile_data = r.getProfile(userid);
 	
-	friends_data = ms.getFriends(userid);
+	friends_data = r.getFriends(userid);
 	
-	activities_data = ms.getActivitiesAtom(userid);
-	friendsActivities_data = ms.getFriendsActivitiesAtom(userid);
+	activities_data = r.getActivitiesAtom(userid);
+	friendsActivities_data = r.getFriendsActivitiesAtom(userid);
 }
 %>
 

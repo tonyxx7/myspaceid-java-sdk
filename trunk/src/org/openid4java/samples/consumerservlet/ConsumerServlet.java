@@ -106,13 +106,21 @@ public class ConsumerServlet extends javax.servlet.http.HttpServlet {
 
 	private void processReturn(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		Identifier identifier = this.verifyResponse(req);
+		
+		Identifier identifier = null;
+		boolean loggedIn = "true".equals(req.getSession().getAttribute("loggedIn")); 
+		if (!loggedIn)
+			identifier = this.verifyResponse(req);
+
 		log.debug("identifier: " + identifier);
-		if (identifier == null) {
+		if (identifier == null && !loggedIn) {
+			System.out.println("A &&&&& identifiyer = " + identifier);
 			this.getServletContext().getRequestDispatcher("/error.jsp?err="+req.getParameter("openid.error"))
 					.forward(req, resp);
 		} else {
-			req.setAttribute("identifier", identifier.getIdentifier());
+			if (identifier != null && identifier.getIdentifier() != null)
+				req.setAttribute("identifier", identifier.getIdentifier());
+			req.getSession().setAttribute("loggedIn", "true");
 			this.getServletContext().getRequestDispatcher(getServletConfig().getInitParameter("return"))
 					.forward(req, resp);
 		}
@@ -298,6 +306,7 @@ public class ConsumerServlet extends javax.servlet.http.HttpServlet {
 				return verified; // success
 			}
 		} catch (OpenIDException e) {
+			e.printStackTrace();
 			// present error to the user
 		}
 

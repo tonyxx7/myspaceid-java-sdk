@@ -62,7 +62,7 @@
 		<fileset dir="${src}">
 			<include name="**/*.java"/>
 			<exclude name="com/myspace/myspaceid/util/*.java"/>
-			<exclude name="com/myspace/myspaceid/MySpaceTest.java"/>
+			<exclude name="com/myspace/myspaceid/*Test.java"/>
 			<exclude name="org/**/*.java"/>
 		</fileset>
 		<classpath>

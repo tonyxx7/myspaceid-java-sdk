@@ -13,29 +13,26 @@
   String key = "18bed0f4247a4f79bc9941bfed5b534c";
   String secret = "2e8ebdafbef844a5929086e659e4188c";
 
-  MySpace ms = new MySpace(key, secret);
-
-  // If callback parameter no supplied, redirect to go do login.
+  // If callback parameter not supplied, redirect to go do login.
   if (callback == null || callback.equals("")) {
-	OAuthToken token = ms.getRequestToken();
 
-	String authorizeUrl = ms.getAuthorizationURL(token, request.getRequestURL() + "?callback=true");
-	request.getSession().setAttribute("requestTokenSecret", token.getSecret());
+	OffsiteContext c1 = new OffsiteContext(key, secret);
+	OAuthToken requestToken = c1.getRequestToken();
+	request.getSession().setAttribute("requestTokenSecret", requestToken.getSecret());
+	System.out.println(requestToken);
+	String authorizeUrl = c1.getAuthorizationURL(requestToken, request.getRequestURL() + "?callback=true");
 	response.sendRedirect(authorizeUrl);
   }
   else {
-	// Check if final MySpace object already available
+	// Check if already authorized
 	String accessTokenKey = (String) request.getSession().getAttribute("accessTokenKey");
 	String accessTokenSecret = (String) request.getSession().getAttribute("accessTokenSecret");
 	if (accessTokenKey == null || accessTokenSecret == null) {
-		// Callback has just been invoked from MySpace after authorization.
-		String newTokenKey = request.getParameter("oauth_token");
-		System.out.println("Using new token: " + newTokenKey);
-	
-		// To get access token, use the new request token returned in the Callback URL, and use the secret returned with the original request token.
+		String requestTokenKey = request.getParameter("oauth_token");
 		String requestTokenSecret = (String) request.getSession().getAttribute("requestTokenSecret");
-		OAuthToken token2 = new OAuthToken(newTokenKey, requestTokenSecret);
-		OAuthToken accessToken = ms.getAccessToken(token2);
+	
+		OffsiteContext c2 = new OffsiteContext(key, secret, requestTokenKey, requestTokenSecret);
+		OAuthToken accessToken = c2.getAccessToken(); // Side effect: sets access token in OffsiteContext object
 		
 		accessTokenKey = accessToken.getKey();
 		accessTokenSecret = accessToken.getSecret();
@@ -44,16 +41,17 @@
 		request.getSession().setAttribute("accessTokenSecret", accessTokenSecret);
 	}
 
-	// Now that we have the access token, create a MySpace object using the "mature" constructor (with 4 arguments).  
-	// This object lets us fetch user data.
-	MySpace ms2 = new MySpace(key, secret, ApplicationType.OFF_SITE, accessTokenKey, accessTokenSecret);
+	// Since we have the access token from before, set it into the OffsiteContext object
+	OffsiteContext c = new OffsiteContext(key, secret);
+	c.setAccessToken(new OAuthToken(accessTokenKey, accessTokenSecret));
 
 	// Fetch and display user ID.
-	String id = ms2.getUserId();
+	String id = c.getUserId();
 	out.println("<br/><br/>User id = " + id + "<br/>");
 
 	// Fetch and display user's name.
-	JSONObject friends = ms2.getFriends(id);
+	RestV1 r = new RestV1(c);
+	JSONObject friends = r.getFriends(id);
 	JSONObject obj = (JSONObject) friends.get("user");
 	out.println("<h2>" + obj.get("name") + "'s friends:</h2>");
 
