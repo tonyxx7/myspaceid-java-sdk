@@ -13,6 +13,7 @@ import com.myspace.myspaceid.util.*;
  */
 public class OAuthServer {
 	protected OAuthConsumer consumer;
+	protected OAuthToken requestToken;
 	protected OAuthToken accessToken;
 
 	/**
@@ -21,6 +22,30 @@ public class OAuthServer {
 	 */
 	public OAuthServer(OAuthConsumer consumer) {
 		this.consumer = consumer;
+	}
+
+	/**
+	 * Returns the request token
+	 * @return
+	 */
+	public OAuthToken getRequestToken() {
+		return requestToken;
+	}
+
+	/**
+	 * 
+	 * @param requestToken
+	 */
+	public void setRequestToken(OAuthToken requestToken) {
+		this.requestToken = requestToken;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public OAuthToken getAccessToken() {
+		return accessToken;
 	}
 
 	/**
@@ -37,7 +62,7 @@ public class OAuthServer {
 	 * @return The URL generated.
 	 */
     public String generateRequestUrl(String path) {
-		return generateRequestUrl(path, "", new HashMap<String, String>());
+		return generateRequestUrl(path, new HashMap<String, String>());
 	}
 
 
@@ -48,8 +73,8 @@ public class OAuthServer {
 	 * @param args A Map containing any additional parameters required for this particular request.
 	 * @return The URL generated.
 	 */
-	public String generateRequestUrl(String path, String tokenSecret, Map<String, String> args) {
-		return generateRequestUrl(path, tokenSecret, args, "GET", null);
+	public String generateRequestUrl(String path, Map<String, String> args) {
+		return generateRequestUrl(path, args, "GET", null);
 	}
 	
 	/**
@@ -67,7 +92,7 @@ public class OAuthServer {
 //		return generateRequestUrl(path, tokenSecret, args, method, removeParamsSet);
 //	}
 
-	public String generateRequestUrl(String path, String tokenSecret, Map<String, String> args, String method, Set<String> removeParams) {
+	public String generateRequestUrl(String path, Map<String, String> args, String method, Set<String> removeParams) {
         long randomNum = new Random().nextLong();
         long timestamp = (long) System.currentTimeMillis()/1000;
         args.put("oauth_consumer_key", consumer.getKey());
@@ -79,6 +104,21 @@ public class OAuthServer {
 			args.put("oauth_token", accessToken.getKey());
 
 		String part3 = buildParams(args);
+		
+		// Decide what token secret to use
+		String tokenSecret = null;
+		if (getAccessToken() == null) {
+			if (getRequestToken() == null) {
+				tokenSecret = "";
+			}
+			else { // We have a request token but don't yet have an access token
+				tokenSecret = getRequestToken().getSecret();
+			}
+		}
+		else {
+			tokenSecret = getAccessToken().getSecret();
+//			System.out.println("$$$$$$$$$$$$$$$ access token = " + getAccessToken());
+		}
 
 		// Compose base string and compute signature
 		String part1 = method;
