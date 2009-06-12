@@ -1,6 +1,7 @@
 package com.myspace.myspaceid;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.json.simple.JSONArray;
@@ -49,6 +50,7 @@ public class RestV1 extends RestAPI {
 		protected static final String API_COMMENTS_URL   = "http://api.myspace.com/v1/users/%s/comments.json";
 		protected static final String API_INDICATORS_URL   = "http://api.myspace.com/v1/users/%s/indicators.json";
 		protected static final String API_PREFERENCES_URL   = "http://api.myspace.com/v1/users/%s/preferences.json";
+		protected static final String API_NOTIFICATIONS_URL   = "http://api.myspace.com/v1/applications/%s/notifications";
 
 		//
 	    // Wrappers for MySpace REST APIs
@@ -60,6 +62,11 @@ public class RestV1 extends RestAPI {
 		 */
 		public RestV1(SecurityContext securityContext) {
 			super(securityContext);
+		}
+		
+		public Object postNotifications(String appId, Map<String, String> appParams) {
+			String url = API_NOTIFICATIONS_URL.replaceFirst("%s", appId);
+			return putUserData("POST", url, new HashMap<String, String>(), appParams);
 		}
 		
 		/**
@@ -176,7 +183,7 @@ public class RestV1 extends RestAPI {
 		 * @return app data corresponding to given keys
 		 */
 	    public JSONArray getUserFriendsAppData(String userId, String keys) {
-			//securityContext.checkIfAuthorized();
+			securityContext.checkIfAuthorized();
 			String url = null;
 			if (keys == null)
 				url = API_FRIENDS_APP_DATA_URL.replaceFirst("%s", userId);
@@ -191,7 +198,7 @@ public class RestV1 extends RestAPI {
 		 * @return user object given his id
 	     */
 	    public JSONObject getUser(String userId) {
-			//securityContext.checkIfAuthorized();
+			securityContext.checkIfAuthorized();
 			String url = API_USER_URL.replaceFirst("%s", userId);
 			return (JSONObject) getUserData(url, new HashMap<String, String>());
 	    }
@@ -202,7 +209,7 @@ public class RestV1 extends RestAPI {
 		 * @return comments for a user.
 		 */
 	    public JSONObject getComments(String userId) {
-			//securityContext.checkIfAuthorized();
+			securityContext.checkIfAuthorized();
 			String url = API_COMMENTS_URL.replaceFirst("%s", userId);
 			return (JSONObject) getUserData(url, new HashMap<String, String>());
 		}
@@ -213,7 +220,7 @@ public class RestV1 extends RestAPI {
 		 * @return indicators for a user.
 		 */
 	    public JSONObject getIndicators(String userId) {
-			//securityContext.checkIfAuthorized();
+			securityContext.checkIfAuthorized();
 			String url = API_INDICATORS_URL.replaceFirst("%s", userId);
 			return (JSONObject) getUserData(url, new HashMap<String, String>());
 		}
@@ -224,7 +231,7 @@ public class RestV1 extends RestAPI {
 		 * @return preferences for a user.
 		 */
 	    public JSONObject getPreferences(String userId) {
-			//securityContext.checkIfAuthorized();
+			securityContext.checkIfAuthorized();
 			String url = API_PREFERENCES_URL.replaceFirst("%s", userId);
 			return (JSONObject) getUserData(url, new HashMap<String, String>());
 		}
@@ -535,7 +542,7 @@ public class RestV1 extends RestAPI {
 		/**
 		 * Posts a mood update.
 		 * @param userId ID of user to query.
-		 * @param mood update to post.
+		 * @param mood Mood update to post.
 		 * @return the return string from the server.
 		 */
 		public Object setMood(String userId, int mood) {
@@ -545,13 +552,29 @@ public class RestV1 extends RestAPI {
 		/**
 		 * Posts a status update.
 		 * @param userId ID of user to query.
-		 * @param Status update to post.
+		 * @param status Status update to post.
 		 * @return the return string from the server.
 		 */
 	    public Object setStatus(String userId, String status) {
 			return postStatus(userId, status);
 		}
-
+	    
+	    /**
+		 * Posts a status and mood update at the same time.
+		 * @param userId ID of user to query.
+		 * @param status Status update to post.
+		 * @param mood Mood update to post.
+		 * @return the return string from the server.
+	     */
+	    public Object setStatusMood(String userId, String status, int mood) {
+			String url = API_PUT_MOOD_URL.replaceFirst("%s", userId);
+			HashMap<String, String> map = new HashMap<String, String>();
+			HashMap<String, String> appParams = new HashMap<String, String>();
+			appParams.put("status", status);
+			appParams.put("mood", "" + mood);
+			return putUserData(url, map, appParams);
+		}
+	    
 		/**
 		 * Returns the status of a given user's friends.
 		 * This method requires that the access token has been stored in its MySpace object.
@@ -642,6 +665,49 @@ public class RestV1 extends RestAPI {
 		}
 		//! Test this
 
+		/**
+		 * Posts a notification to a list of recipients.  At most 1000 recipients can be specified.  You will need to pass in 
+		 * a template, which specifies the text in the notification, the buttons, and where the buttons link to.  
+		 * @param recipients A comma-separated list of recipients.
+		 * @param templateParameters Parameters defining the template for the notification.  This is a Map.  Possible key values are:
+		 *        <ol>  
+		 *        <li> content (required) - Text content of the notification
+		 *        <li> button0_surface (optional) - where button 0 should link to: "canvas" or "appProfile"
+		 *        <li> button0_label (optional) - text label on button 0
+		 *        <li> button1_surface (optional) - where button 1 should link to: "canvas" or "appProfile"
+		 *        <li> button1_label (optional) - text label on button 1
+		 *        </ol>
+		 * @param mediaItems A URI to a MySpace image, either a profile image or an album photo. External images are not allowed. 
+		 *        At this time, only one media item is supported. (optional; pass null to not specify).
+		 */
+		public Object sendNotification(String appId, String recipients, Map<String, String> templateParameters, String mediaItems) {
+			if (templateParameters.get("content") == null)
+				throw new MySpaceException("'content' key required in templateParameters Map");
+
+			// Convert templateParameters to a string representation
+			StringBuffer sb = new StringBuffer("{");
+			Iterator it = templateParameters.keySet().iterator();
+			while (it.hasNext()) {
+				String key = (String) it.next();
+				sb.append("\"").append(key).append("\"").append(":").append("\"").append(templateParameters.get(key)).append("\"");
+				sb.append(it.hasNext() ? "," : "}");
+			}
+			String templateParametersStr = sb.toString();
+//			System.out.println(">>>>>> templateParametersStr = " + templateParametersStr);
+			
+			// Put mediaItems in braces, as required by the REST API
+			mediaItems = "{\"" + mediaItems + "\"}";
+
+			// Send request
+			HashMap<String, String> appParams = new HashMap<String, String>();
+			appParams.put("recipients", recipients);
+			appParams.put("templateParameters", templateParametersStr);
+			appParams.put("mediaItems", mediaItems);
+
+			String url = API_NOTIFICATIONS_URL.replaceFirst("%s", appId);
+			return putUserData("POST", url, new HashMap<String, String>(), appParams);
+		}
+		
 		/**
 		 * @param args Arguments passed in.
 		 */

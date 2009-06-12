@@ -620,9 +620,18 @@ public class RestV1Test extends Test {
 		Object data = null;
 		JSONObject obj = null;
 
-		printTitle("postStatus(String) with valid user id");
+		printTitle("postMood(String) with valid user id");
 		data = r.postMood(id, 3);
 		out.println("postMood(String) 1: '" + (String) data + "'");
+	}
+
+	public static void testPostStatusMood() {
+		Object data = null;
+		JSONObject obj = null;
+
+		printTitle("postStatusMood(String) with valid user id");
+		data = r.setStatusMood(id, "I'm updating my status at the same time as my mood", 5);
+		out.println("postStatusMood(String) 1: '" + (String) data + "'");
 	}
 
 	public static void testGetFriendsStatus() {
@@ -848,8 +857,28 @@ public class RestV1Test extends Test {
 		data = r.getPreferences(id);
 		out.println("getPreferences() 1: " + data);
 	}
+	
+	public static void testSendNotification() {
+		printTitle("sendNotification()");
+		String key = "http://www.myspace.com/472447237";
+		String secret = "92f481784c13461ab5c5ac325615b8c1";
+		OnsiteContext c = new OnsiteContext(key, secret);
+		RestV1 r = new RestV1(c);
+		
+		HashMap<String, String> templateParameters = new HashMap<String, String>();
+		templateParameters.put("content", "Test notification content");
+		templateParameters.put("button0_surface", "canvas");
+		templateParameters.put("button0_label", "Go To App Canvas");
+		templateParameters.put("button1_surface", "appProfile");
+		templateParameters.put("button1_label", "Go To App Profile");
+		Object obj = r.sendNotification("135455", "454304609,28568917", templateParameters, "http://api.myspace.com/v1/users/296768296");
+		out.println("sendNotification() 1: " + obj);
+	}
 
 	public static void main(String[] args) throws Exception {
+
+		testSendNotification();
+		
 		testGetFriendsAppData();
 		setUpForOnsiteTests();
 		globalTests();
@@ -894,5 +923,7 @@ public class RestV1Test extends Test {
 
 		testPostStatus();
 		testPostMood();
+
+		testPostStatusMood();
 	}
 }

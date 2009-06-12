@@ -96,6 +96,7 @@ System.out.println("Request token = " + token);
 		// Set access token as side effect
 		OAuthToken accessToken = new OAuthToken(response);
 		server.setAccessToken(accessToken);
+System.out.println("accessToken = " + accessToken);		
 
 		return accessToken;
 	}
