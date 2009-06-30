@@ -238,7 +238,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns the albums of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return the albums of the given user.
 		 */
@@ -248,7 +247,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns the albums of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param page Which page.  Pass -1 to not specify.
 		 * @param pageSize Number of items per page.  Pass -1 to not specify.
@@ -267,7 +265,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns an album of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param albumId Which album to return.
 		 * @return an album of the given user.
@@ -282,7 +279,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns a photo in an album of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param albumId Which album.
 		 * @param photoId Which photo to return.
@@ -298,7 +294,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns an album's info for the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param albumId Which album to return.
 		 * @return an album's info for the given user.
@@ -313,7 +308,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns the friends of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return an album of the given user.
 		 */
@@ -337,7 +331,6 @@ public class RestV1 extends RestAPI {
 	    
 		/**
 		 * Returns the friends of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param page Which page.  First page is numbered '1'.  Pass -1 to not specify.
 		 * @param pageSize Number of items per page.  Pass -1 to not specify.
@@ -403,7 +396,6 @@ public class RestV1 extends RestAPI {
 	    
 		/**
 		 * Returns the friendship of the given user with other users.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param friendIds IDs of friends to check, separated by semicolons.
 		 * @return the friendship of the given user with other users.
@@ -416,7 +408,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns the mood of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return the mood of the given user.
 		 */
@@ -428,7 +419,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns the moods available to the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return the moods available to the given user.
 		 */
@@ -440,7 +430,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns the photos of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param page Which page.  Pass -1 to not specify.
 		 * @param pageSize Number of items per page.  Pass -1 to not specify.
@@ -459,7 +448,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns a photo of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param photoId Id of photo to get.
 		 * @return a photo of the given user.
@@ -472,7 +460,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns the profile of a given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return the profile of the given user.
 		 */
@@ -482,7 +469,6 @@ public class RestV1 extends RestAPI {
 	 
 		/**
 		 * Returns the profile of a given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param detailType "basic", "full" or "extended"
 		 * @return the profile of the given user.
@@ -497,7 +483,6 @@ public class RestV1 extends RestAPI {
 	 
 		/**
 		 * Returns the status of a given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return the status of the given user.
 		 */
@@ -508,6 +493,20 @@ public class RestV1 extends RestAPI {
 		}
 
 		/**
+		 * Returns the status history of a given user.
+		 * @param userId ID of user to query.
+		 * @return the status of the given user.
+		 */
+	    public String getStatusHistory(String userId) {
+			String url = API_ACTIVITIES_URL.replaceFirst("%s", userId);
+			HashMap<String, String> map = new HashMap<String, String>();
+			map.put("activityTypes", "StatusMoodUpdate");
+			String reqUrl = server.generateRequestUrl(url, map);
+			String response = server.doHttpReq(reqUrl);
+			return response;
+		}
+
+	    /**
 		 * Posts a status update.
 		 * @param userId ID of user to query.
 		 * @param Status update to post.
@@ -577,7 +576,6 @@ public class RestV1 extends RestAPI {
 	    
 		/**
 		 * Returns the status of a given user's friends.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return the status of the given user's friends.
 		 */
@@ -590,7 +588,6 @@ public class RestV1 extends RestAPI {
 		
 		/**
 		 * Returns the videos of a given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @return the videos of the given user.
 		 */
@@ -602,7 +599,6 @@ public class RestV1 extends RestAPI {
 
 		/**
 		 * Returns a video of the given user.
-		 * This method requires that the access token has been stored in its MySpace object.
 		 * @param userId ID of user to query.
 		 * @param videoId Id of photo to get.
 		 * @return a video of the given user.
