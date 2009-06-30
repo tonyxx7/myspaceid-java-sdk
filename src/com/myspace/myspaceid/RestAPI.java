@@ -18,6 +18,8 @@ public class RestAPI {
 	// Member variables
 	protected SecurityContext securityContext;
 	protected OAuthServer server; // This is not set directly by the developer.  Represents the MySpace server viewed as an OAuthServer.
+	protected String dateFormat;
+	protected int timeZone;
 
 	private RestAPI() {
 	}
@@ -39,6 +41,12 @@ public class RestAPI {
 	 * @return user data in a {@link UserData} object.
 	 */
 	protected Object getUserData(String url, HashMap<String, String> map) {
+		// If specified, set date format and time zone for all REST calls.
+		if (getDateFormat() != null) {
+			map.put("dateFormat", getDateFormat());
+			map.put("timeZone", "" + getTimeZone());
+		}
+		
 		String reqUrl = server.generateRequestUrl(url, map);
 		String response = server.doHttpReq(reqUrl);
 		JSONParser parser = new JSONParser();
@@ -127,4 +135,16 @@ public class RestAPI {
 		return (String) response;
 	}
 
+	public String getDateFormat() {
+		return dateFormat;
+	}
+
+	public int getTimeZone() {
+		return timeZone;
+	}
+
+	public void setDateFormatTimeZone(String dateFormat, int timeZone) {
+		this.dateFormat = dateFormat;
+		this.timeZone = timeZone;
+	}
 }

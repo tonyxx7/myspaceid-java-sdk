@@ -541,6 +541,7 @@ public class RestV1Test extends Test {
 
 		// First test with valid id
 		printTitle("getProfile(String) with valid user id");
+//		id = "28568917";
 		data = r.getProfile(id);
 		out.println("getProfile(String) 1: " + data);
 
@@ -603,6 +604,30 @@ public class RestV1Test extends Test {
 		catch (Exception e)
 		{
 			out.println("Exception occurred with getStatus(String) 2nd test");
+		}
+	}
+
+	public static void testGetStatusHistory() {
+		//  - test with valid id
+		//  - test invalid id
+
+		String data = null;
+
+		// First test with valid id
+		printTitle("getStatusHistory(String) with valid user id");
+		data = r.getStatusHistory(id);
+		out.println("getStatusHistory(String) 1: " + data);
+
+		// 2nd test with invalid id
+		printTitle("getStatusHistory(String) with invalid user id 100");
+		try
+		{
+			data = r.getStatusHistory("100");
+			out.println("getStatusHistory(String) 2: " + data);
+		}
+		catch (Exception e)
+		{
+			out.println("Exception occurred with getStatusHistory(String) 2nd test");
 		}
 	}
 
@@ -875,6 +900,26 @@ public class RestV1Test extends Test {
 		out.println("sendNotification() 1: " + obj);
 	}
 
+	public static void testSetDateFormatTimeZone() {
+		JSONObject data = null;
+
+		r.setDateFormatTimeZone("iso8601", 0);
+		printTitle("getMood(String) with valid date format");
+		data = r.getMood(id);
+		out.println("getMood(String) 1: " + data);
+
+		r.setDateFormatTimeZone("iso8601", 2);
+		printTitle("getMood(String) with a different time zone");
+		data = r.getMood(id);
+		out.println("getMood(String) 1: " + data);
+
+
+		r.setDateFormatTimeZone("abc", 3); // Case of invalid format
+		printTitle("getMood(String) with a bad date format");
+		data = r.getMood(id);
+		out.println("getMood(String) 1: " + data);
+	}
+
 	public static void main(String[] args) throws Exception {
 
 		testSendNotification();
@@ -901,6 +946,7 @@ public class RestV1Test extends Test {
 		testGetProfile();
 		testGetProfile2();
 		testGetStatus();
+		testGetStatusHistory();
 		testGetFriendsStatus();
 		testGetVideos();
 		testGetVideo();
@@ -917,7 +963,7 @@ public class RestV1Test extends Test {
 		testClearAppData();
 		Thread.sleep(1000);
 		testGetAppData(); // Fetch again to verify deletion
-
+//
 //		testGetComments();
 		testGetIndicators();
 
@@ -925,5 +971,8 @@ public class RestV1Test extends Test {
 		testPostMood();
 
 		testPostStatusMood();
+		
+		// Test dateFormat and timeZone
+		testSetDateFormatTimeZone();
 	}
 }

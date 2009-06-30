@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
+import javax.servlet.http.HttpServletRequest;
+
 import com.myspace.myspaceid.*;
 import com.myspace.myspaceid.util.*;
 
@@ -12,6 +14,8 @@ import com.myspace.myspaceid.util.*;
  * Encapsulates an OAuthServer against which we send requests for tokens, etc.
  */
 public class OAuthServer {
+	private final static String VERSION = "0.8.1";
+	
 	protected OAuthConsumer consumer;
 	protected OAuthToken requestToken;
 	protected OAuthToken accessToken;
@@ -100,31 +104,19 @@ public class OAuthServer {
         args.put("oauth_signature_method", "HMAC-SHA1");
         args.put("oauth_timestamp", Long.toString(timestamp));
         args.put("oauth_version", "1.0");
+        args.put("msid_sdk", "java_" + VERSION); // For tracking usage of this sdk on server side
 		if (accessToken != null && accessToken.getKey() != null) // If an access token has been stored, automatically pass it
 			args.put("oauth_token", accessToken.getKey());
 
 		String part3 = buildParams(args);
-		
-		// Decide what token secret to use
-		String tokenSecret = null;
-		if (getAccessToken() == null) {
-			if (getRequestToken() == null) {
-				tokenSecret = "";
-			}
-			else { // We have a request token but don't yet have an access token
-				tokenSecret = getRequestToken().getSecret();
-			}
-		}
-		else {
-			tokenSecret = getAccessToken().getSecret();
-//			System.out.println("$$$$$$$$$$$$$$$ access token = " + getAccessToken());
-		}
+		String tokenSecret = computeTokenSecret();
 
 		// Compose base string and compute signature
 		String part1 = method;
         String part2 = path;
         String baseString = encode(part1)+"&"+encode(part2)+"&"+encode(part3);
 		String combinedSecret = consumer.getSecret() + "&" + tokenSecret;
+//System.out.println("base string = '" + baseString + "'");
 //System.out.println("CombinedSecret = '" + combinedSecret + "'");
         String sig = getHMACSHA1(combinedSecret, baseString);
 //System.out.println("$$$$$$$$$$$$ base string " + baseString);
@@ -166,6 +158,65 @@ public class OAuthServer {
 		return s.toString();
 	}
 
+	/**
+	 * Returns signature from an Http request.  Use this for checking the signature for an iframed app.  Iframing is the 
+	 * standard and recommended way for using this SDK to build the server component of your on-site MySpace app.  However, 
+	 * to verify that requests to your server are coming from MySpace, you need to verify that the signature in those 
+	 * requests are correct.  This method is provided as a convenience method to help you verify the signature of the requests.
+	 * @param The Http request passed to your iframed app.
+	 * @return The signature computed from the given Http request.
+	 */
+	public String buildSignature(HttpServletRequest req) {
+		// Prepare hash map of parameters in base string 
+		HashMap<String, String> urlParams = new HashMap<String, String>();
+		Map map = req.getParameterMap();
+		Iterator it = map.keySet().iterator();
+		while (it.hasNext()) {
+			String key = (String) it.next();
+			String[] values = (String[]) map.get(key);
+			if (!key.equals("oauth_signature")/* && key.startsWith("oauth")*/) { // Don't include the signature
+				urlParams.put(key, values[0]); // Support only one-value for each parameter in url  //! Encoding here doesn't work
+//				System.out.println("" + key + "=" + values[0]);
+			}
+		}
+		
+		// Now prepare base string
+		String part3 = buildParams(urlParams);
+
+		// Compose base string and compute signature
+		String part1 = req.getMethod();
+		int port = req.getServerPort();
+		String portStr = port == 80 ? "" : ":" + port;
+        String part2 = req.getScheme() + "://" + req.getServerName() + portStr + req.getRequestURI();
+        String baseString = encode(part1)+"&"+encode(part2)+"&"+encode(part3);
+//System.out.println("base string = '" + baseString + "'");
+		String combinedSecret = consumer.getSecret() + "&" + computeTokenSecret();
+//System.out.println("CombinedSecret = '" + combinedSecret + "'");
+        String sig = getHMACSHA1(combinedSecret, baseString);
+//System.out.println("signature = '" + sig + "'");
+        
+		return sig;
+	}
+	
+	protected String computeTokenSecret() {
+		// Compute secret to use
+		String tokenSecret = null;
+		if (getAccessToken() == null) {
+			if (getRequestToken() == null) {
+				tokenSecret = "";
+			}
+			else { // We have a request token but don't yet have an access token
+				tokenSecret = getRequestToken().getSecret();
+			}
+		}
+		else {
+			tokenSecret = getAccessToken().getSecret();
+//			System.out.println("$$$$$$$$$$$$$$$ access token = " + getAccessToken());
+		}
+		
+		return tokenSecret;
+	}
+	
 	/**
 	 * Returns the HMAC-SHA1 signature of a given string.
 	 * @param key Key (or secret) to use in obtaining the signature.
