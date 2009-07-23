@@ -99,8 +99,8 @@ public class RestV1 extends RestAPI {
 		}
 
 		/**
-		 * Sets the given key-value pairs into the global app data.
-		 * @param appParams HashMap containing key-value pairs to store.
+		 * Clears the global app data with the given keys.
+		 * @param keys semicolon-separated keys
 		 * @return 
 		 */
 	    public Object clearGlobalAppData(String keys) {
@@ -151,7 +151,7 @@ public class RestV1 extends RestAPI {
 
 	    /**
 		 * Sets the given key-value pairs into the global app data.
-		 * @param appParams HashMap containing key-value pairs to store.
+		 * @param keys semicolon-separated keys.
 		 * @return 
 		 */
 	    public Object clearAppData(String userId, String keys) {
@@ -226,7 +226,7 @@ public class RestV1 extends RestAPI {
 		}
 
 		/**
-		 * Returns preferences for a user.
+		 * Returns preferences for a user.  This applies to OpenSocial apps only.
 		 * @param userId ID of user
 		 * @return preferences for a user.
 		 */
@@ -623,13 +623,17 @@ public class RestV1 extends RestAPI {
 		 * @param userId The ID of the user
 		 * @param culture (not used yet)
 		 * @param lastRetrievalTimeStamp (not used yet)
-		 * @param activityTypes (not used yet)
+		 * @param activityTypes takes in piped (|) activity type parameters to filter result data; http://developerwiki.myspace.com/index.php?title=ActivityStream_Queries
 		 * @return the activity stream of the user.
 		 */
 		public String getActivitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
 			//securityContext.checkIfAuthorized();
 			String url = API_ACTIVITIES_URL.replaceFirst("%s", userId);
-			String reqUrl = server.generateRequestUrl(url, new HashMap<String, String>());
+			HashMap<String, String> map = new HashMap<String, String>();
+			if (activityTypes != null) {
+				map.put("activityTypes", activityTypes);
+			}
+			String reqUrl = server.generateRequestUrl(url, map);
 			String response = server.doHttpReq(reqUrl);
 			return response;
 		}
@@ -648,14 +652,18 @@ public class RestV1 extends RestAPI {
 		 * Returns the activities of the user's friends.
 		 * @param userId The ID of the user
 		 * @param culture (not used yet)
-		 * @param lastRetrievalTimeStamp (not used yet)
-		 * @param activityTypes (not used yet)
+		 * @param retrieveUntilDate (not used yet)
+		 * @param activityTypes takes in piped (|) activity type parameters to filter result data; http://developerwiki.myspace.com/index.php?title=ActivityStream_Queries
 		 * @return the activity stream of the user's friends.
 		 */
 		public String getFriendsActivitiesAtom(String userId, String culture, String lastRetrievalTimeStamp, String activityTypes) {
 			//securityContext.checkIfAuthorized();
 			String url = API_FRIENDSACTIVITIES_URL.replaceFirst("%s", userId);
-			String reqUrl = server.generateRequestUrl(url, new HashMap<String, String>());
+			HashMap<String, String> map = new HashMap<String, String>();
+			if (activityTypes != null) {
+				map.put("activityTypes", activityTypes);
+			}
+			String reqUrl = server.generateRequestUrl(url, map);
 			String response = server.doHttpReq(reqUrl);
 			return response;
 		}
