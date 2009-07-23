@@ -766,6 +766,13 @@ public class RestV1Test extends Test {
 
 		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
 		System.out.println("getActivitiesAtom(String) 1: " + activities);
+
+		// Second test with valid id and activity type
+		printTitle("getActivitiesAtom(String, String, String, String) with valid user id and activityTypes");
+		activities = r.getActivitiesAtom(id, null, null, "PhotoAdd|FriendAdd");
+
+		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
+		System.out.println("getActivitiesAtom(String) 2: " + activities);
 	}
 
 	public static void testGetFriendsActivitiesAtom() {
@@ -775,6 +782,13 @@ public class RestV1Test extends Test {
 
 		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
 		System.out.println("getFriendsActivitiesAtom(String) 1: " + activities);
+
+		// Second test with valid id and activity type
+		printTitle("getFriendsActivitiesAtom(String, String, String, String) with valid user id and activityTypes");
+		activities = r.getFriendsActivitiesAtom(id, null, null, "PhotoAdd|FriendAdd");
+
+		// Note: this prints out to System.out because it will change with time; not suitable for automatic verification
+		System.out.println("getFriendsActivitiesAtom(String) 2: " + activities);
 	}
 	
 	public static void testPutAppData() {
@@ -882,7 +896,7 @@ public class RestV1Test extends Test {
 		data = r.getPreferences(id);
 		out.println("getPreferences() 1: " + data);
 	}
-	
+
 	public static void testSendNotification() {
 		printTitle("sendNotification()");
 		String key = "http://www.myspace.com/472447237";
