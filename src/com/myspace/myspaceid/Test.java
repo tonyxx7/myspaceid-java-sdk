@@ -26,18 +26,19 @@ public class Test {
 
 	public static void setUpForOffsiteTests() throws Exception {
 			c1 = new OffsiteContext(key, secret);
-			OAuthToken requestToken = c1.getRequestToken();
+			OAuthToken requestToken = c1.getRequestToken("http://localhost:8080/myspaceid-sample/oauth/oauth-demo.jsp?callback=true");
+//			OAuthToken requestToken = c1.getRequestToken(null);
 			System.out.println(requestToken);
-			String str = c1.getAuthorizationURL(requestToken, "http://localhost:8080/myspaceid-sample/oauth/oauth-demo.jsp?callback=true");
+			String str = c1.getAuthorizationURL(requestToken);
 	
 			System.out.println("\nAuthorization URL (copy and access this URL using a browser and log in): \n" + str);
-			System.out.print("\nPress enter once authorized: ");
+			System.out.print("\nEnter oauth_verifier parameter in callback: ");
 			InputStreamReader isr = new InputStreamReader(System.in);
 			BufferedReader br = new BufferedReader(isr);
-			String newTokenKey = br.readLine();
-			newTokenKey = URLDecoder.decode(newTokenKey);
+			String oauth_verifier = br.readLine();
+			oauth_verifier = URLDecoder.decode(oauth_verifier);
 			System.out.println();
-			System.out.println("Using new token: " + newTokenKey);
+			System.out.println("Using oauth_verifier: " + oauth_verifier);
 	
 			// To get access token, use the new request token returned in the Callback URL, and use the secret returned with the original request token
 	//		OAuthToken token2 = new OAuthToken(newTokenKey, token.getSecret());
@@ -45,7 +46,7 @@ public class Test {
 	
 			c2 = new OffsiteContext(key, secret, requestToken.getKey(), requestToken.getSecret());
 	//		c2 = new OffsiteContext(key, secret, newTokenKey, requestToken.getSecret());
-			c2.getAccessToken(); // This remembers the access token inside the OffsiteContext as a side effect
+			c2.getAccessToken(oauth_verifier); // This remembers the access token inside the OffsiteContext as a side effect
 			id = c2.getUserId();
 			System.out.println(">>> User id = " + id);
 			

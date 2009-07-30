@@ -189,7 +189,7 @@ public class OAuthServer {
 		String portStr = port == 80 ? "" : ":" + port;
         String part2 = req.getScheme() + "://" + req.getServerName() + portStr + req.getRequestURI();
         String baseString = encode(part1)+"&"+encode(part2)+"&"+encode(part3);
-//System.out.println("base string = '" + baseString + "'");
+System.out.println("base string = '" + baseString + "'");
 		String combinedSecret = consumer.getSecret() + "&" + computeTokenSecret();
 //System.out.println("CombinedSecret = '" + combinedSecret + "'");
         String sig = getHMACSHA1(combinedSecret, baseString);

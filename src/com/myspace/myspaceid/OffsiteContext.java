@@ -51,13 +51,17 @@ public class OffsiteContext extends SecurityContext {
 	/**
 	 * Returns the request token.  After this, allow the user to authenticate himself by redirecting 
 	 * to the URL found by calling {@link #getAuthorizationURL}.
+	 * @param callbackURL The callback URL that MySpace redirects the user to after she authenticates successfully.
 	 * @return A request token.
 	 */
-    public OAuthToken getRequestToken() {
-		String reqUrl = server.generateRequestUrl(OAUTH_REQUEST_TOKEN_URL);
+    public OAuthToken getRequestToken(String callbackURL) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		if (callbackURL != null)
+			map.put("oauth_callback", callbackURL);
+		String reqUrl = server.generateRequestUrl(OAUTH_REQUEST_TOKEN_URL, map);
 		String response = server.doHttpReq(reqUrl);
 		OAuthToken token = new OAuthToken(response);
-System.out.println("Request token = " + token);
+//System.out.println("Request token = " + token);
 		return token;
 	}
 
@@ -66,13 +70,11 @@ System.out.println("Request token = " + token);
 	 * browser is redirected back to the callback URL.  The callback URL receives an oauth_token parameter that you need to pick up and then 
 	 * call {@link #getAccessToken}.
 	 * @param requestToken The request token obtained by calling {@link #getRequestToken}.
-	 * @param callbackURL The callback URL that MySpace redirects the user to after she authenticates successfully.
 	 * @return the authorization URL that you should redirect to for the user to authenticate.
 	 */
-    public String getAuthorizationURL(OAuthToken requestToken, String callbackURL) { 
+    public String getAuthorizationURL(OAuthToken requestToken) { 
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("oauth_token", requestToken.getKey());
-		map.put("oauth_callback", callbackURL);
+		map.put("oauth_token", java.net.URLDecoder.decode(requestToken.getKey()));
 		String result = server.generateRequestUrl(OAUTH_AUTHORIZATION_URL, map);
 		return result;
 	}
@@ -84,11 +86,24 @@ System.out.println("Request token = " + token);
 	 * @return An access token; you can now start getting user data with this access token.
 	 */
     public OAuthToken getAccessToken() {
+		return getAccessToken(null);
+	}
+	
+	/**
+	 * Returns the access token for the user.  The side effect of this call is to set the access token in this OffsiteContext object.
+	 * Make sure you call this using the constructor that sets the (authorized) request token.
+	 * so that you can now use it to create a {@link RestV1} (or other REST wrapper object) to start fetching user data.   
+	 * @param oauthVerifier oauth_verifier parameter returned in the callback for OAuth 1.0a workflow
+	 * @return An access token; you can now start getting user data with this access token.
+	 */
+    public OAuthToken getAccessToken(String oauthVerifier) {
     	if (server.getRequestToken() == null || server.getRequestToken().getSecret() == null)
     		throw new MySpaceException("requestToken is null.  Must have authorized request token to get the access token");
     	
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("oauth_token", server.getRequestToken().getKey()); // This needs to be populated from the outside!
+		map.put("oauth_token", java.net.URLDecoder.decode(server.getRequestToken().getKey()));
+		if (oauthVerifier != null)
+			map.put("oauth_verifier", oauthVerifier);
 		String reqUrl = server.generateRequestUrl(OAUTH_ACCESS_TOKEN_URL, map);
 //System.out.println("+++++ " + reqUrl);
 		String response = server.doHttpReq(reqUrl);
@@ -96,7 +111,7 @@ System.out.println("Request token = " + token);
 		// Set access token as side effect
 		OAuthToken accessToken = new OAuthToken(response);
 		server.setAccessToken(accessToken);
-System.out.println("accessToken = " + accessToken);		
+//System.out.println("accessToken = " + accessToken);		
 
 		return accessToken;
 	}
