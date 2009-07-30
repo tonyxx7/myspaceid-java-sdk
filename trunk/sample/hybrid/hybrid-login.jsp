@@ -17,3 +17,7 @@
 </form>
 </body>
 </html>
+<%
+	request.getSession().setAttribute("accessTokenKey", null);
+	request.getSession().setAttribute("accessTokenSecret", null);
+%>

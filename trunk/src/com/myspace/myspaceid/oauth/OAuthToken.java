@@ -18,7 +18,9 @@ public class OAuthToken
 		int j = str.indexOf("&", i + 1);
 		key = str.substring(i + 1, j).trim();
 		int k = str.indexOf("=", j + 1);
-		secret = str.substring(k + 1, str.length()).trim();
+		int m = str.indexOf("&", k + 1);
+		m = m == -1 ? str.length() : m;
+		secret = str.substring(k + 1, m).trim();
 	}
 
 	public String getSecret() {

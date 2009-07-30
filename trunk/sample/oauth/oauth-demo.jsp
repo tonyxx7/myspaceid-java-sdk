@@ -16,23 +16,28 @@
   // If callback parameter not supplied, redirect to go do login.
   if (callback == null || callback.equals("")) {
 
+	request.getSession().setAttribute("accessTokenKey", null);
+	request.getSession().setAttribute("accessTokenSecret", null);
+
 	OffsiteContext c1 = new OffsiteContext(key, secret);
-	OAuthToken requestToken = c1.getRequestToken();
+	OAuthToken requestToken = c1.getRequestToken(request.getRequestURL() + "?callback=true");
 	request.getSession().setAttribute("requestTokenSecret", requestToken.getSecret());
 	System.out.println(requestToken);
-	String authorizeUrl = c1.getAuthorizationURL(requestToken, request.getRequestURL() + "?callback=true");
+	String authorizeUrl = c1.getAuthorizationURL(requestToken);
 	response.sendRedirect(authorizeUrl);
   }
   else {
 	// Check if already authorized
 	String accessTokenKey = (String) request.getSession().getAttribute("accessTokenKey");
 	String accessTokenSecret = (String) request.getSession().getAttribute("accessTokenSecret");
+
 	if (accessTokenKey == null || accessTokenSecret == null) {
 		String requestTokenKey = request.getParameter("oauth_token");
+		String oauthVerifier = request.getParameter("oauth_verifier");
 		String requestTokenSecret = (String) request.getSession().getAttribute("requestTokenSecret");
 	
 		OffsiteContext c2 = new OffsiteContext(key, secret, requestTokenKey, requestTokenSecret);
-		OAuthToken accessToken = c2.getAccessToken(); // Side effect: sets access token in OffsiteContext object
+		OAuthToken accessToken = c2.getAccessToken(oauthVerifier); // Side effect: sets access token in OffsiteContext object
 		
 		accessTokenKey = accessToken.getKey();
 		accessTokenSecret = accessToken.getSecret();
