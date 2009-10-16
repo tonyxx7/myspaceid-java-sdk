@@ -98,7 +98,24 @@ public class OAuthServer {
 
 	public String generateRequestUrl(String path, Map<String, String> args, String method, Set<String> removeParams) {
         long randomNum = new Random().nextLong();
-        long timestamp = (long) System.currentTimeMillis()/1000;
+        
+        long timestamp = 0;
+        
+        /*Added by Shashi on 10/08/2009
+         * Caluclates Timestamps for given TimeZone
+         * */
+        if(consumer.getTimeZone() == null)
+        {
+        	timestamp = (long) System.currentTimeMillis()/1000;
+        }
+        else
+        {
+        	Utilities utilObj = new Utilities();
+        	timestamp = utilObj.getTimeStamp(consumer.getTimeZone()); 
+        }
+           
+        	
+        
         args.put("oauth_consumer_key", consumer.getKey());
 		args.put("oauth_nonce", Long.toString(randomNum));
         args.put("oauth_signature_method", "HMAC-SHA1");

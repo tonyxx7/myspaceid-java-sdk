@@ -7,10 +7,6 @@ import java.util.Map;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.myspace.myspaceid.oauth.OAuthConsumer;
-import com.myspace.myspaceid.oauth.OAuthServer;
-import com.myspace.myspaceid.oauth.OAuthToken;
-
 /**
  * Wraps MySpace's V1 REST API.
  * @author kchoo

@@ -1,22 +1,39 @@
 package com.myspace.myspaceid;
 
+import java.util.TimeZone;
+
 import com.myspace.myspaceid.oauth.OAuthConsumer;
 import com.myspace.myspaceid.oauth.OAuthServer;
-import com.myspace.myspaceid.oauth.OAuthToken;
 
 /**
  * This is the base security context class.  You wouldn't normally use this.  See {@link OffsiteContext} and {@link OnsiteContext}.
  */
 public class SecurityContext {
-	protected OAuthServer server; // This is not set directly by the developer.  Represents the MySpace server viewed as an OAuthServer.
+	
+	protected OAuthServer server; /* This is not set directly by the developer. 
+	                                 Represents the MySpace server viewed as an OAuthServer. */
+	
 
 	/**
 	 * Creates a security context object.
 	 * @param consumerKey
 	 * @param consumerSecret
 	 */
-	public SecurityContext(String consumerKey, String consumerSecret) {
+	public SecurityContext(String consumerKey, String consumerSecret) 
+	{
 		OAuthConsumer consumer = new OAuthConsumer(consumerKey, consumerSecret);
+		server = new OAuthServer(consumer);
+	}
+
+	/**@added by Shashi on 10/08/2009 to capture TimeZone value
+	 * Creates a security context object.
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param timeZone
+	 */
+	public SecurityContext(String consumerKey, String consumerSecret,TimeZone timeZone) 
+	{
+		OAuthConsumer consumer = new OAuthConsumer(consumerKey, consumerSecret,timeZone);
 		server = new OAuthServer(consumer);
 	}
 

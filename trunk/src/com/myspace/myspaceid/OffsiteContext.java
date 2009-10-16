@@ -3,6 +3,7 @@ package com.myspace.myspaceid;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.HashMap;
+import java.util.TimeZone;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,14 +16,29 @@ import com.myspace.myspaceid.oauth.OAuthToken;
  * After you have obtained the access token for the user, you can create a MySpace API wrapper object 
  * (e.g., {@link RestV1} or {@link PortableContacts}) and start making calls to fetch and store data.    
  */
-public class OffsiteContext extends SecurityContext {
+public class OffsiteContext extends SecurityContext 
+{
+	
 	protected static final String OAUTH_REQUEST_TOKEN_URL = "http://api.myspace.com/request_token";
 	protected static final String OAUTH_AUTHORIZATION_URL = "http://api.myspace.com/authorize";
 	protected static final String OAUTH_ACCESS_TOKEN_URL  = "http://api.myspace.com/access_token";
 	protected static final String API_USERINFO_URL   	  = "http://api.myspace.com/v1/user.json";
 
-//	protected OAuthToken requestToken;
-//	protected OAuthToken accessToken;
+	//	protected OAuthToken requestToken;
+	//	protected OAuthToken accessToken;
+	
+	
+	/**
+	 * Creates a security context for an offsite application.  For an offsite app, use this constructor to first get the 
+	 * request token and the authorization URL.
+	 * @param consumerKey
+	 * @param consumerSecret
+	 * @param timeZone         // Calculate oauth_timestamp for given timezone 
+	 */
+	public OffsiteContext(String consumerKey, String consumerSecret,TimeZone timeZone) {
+		super(consumerKey, consumerSecret,timeZone);
+	}
+	
 	
 	/**
 	 * Creates a security context for an offsite application.  For an offsite app, use this constructor to first get the 
