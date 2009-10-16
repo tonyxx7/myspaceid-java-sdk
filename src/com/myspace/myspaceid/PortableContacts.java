@@ -2,7 +2,6 @@ package com.myspace.myspaceid;
 
 import java.util.HashMap;
 
-import com.myspace.myspaceid.oauth.OAuthServer;
 import org.json.simple.JSONObject;
 
 /**
