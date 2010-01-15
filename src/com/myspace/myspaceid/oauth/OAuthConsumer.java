@@ -19,6 +19,21 @@ public class OAuthConsumer
 		this.secret   = secret;
 		this.timeZone = timeZone;
 	}
+	protected TimeZone	timeZone;  // Added by Shashi 10/08/2009 
+								   // Calculate oauth_timestamp for given timezone 
+	                               // otherwise OAuth server will consider default TimeZone 
+
+
+	public OAuthConsumer(String key, String secret,TimeZone timeZone) 
+	{
+		this.key = key;
+		this.secret = secret;
+
+	public OAuthConsumer(String key, String secret) 
+	{
+		this(key,secret,TimeZone.getDefault());
+		this.timeZone = timeZone;
+	}
 
 	public OAuthConsumer(String key, String secret) 
 	{
@@ -41,6 +56,16 @@ public class OAuthConsumer
 		this.secret = secret;
 	}
 	
+
+
+
+	public TimeZone getTimeZone() {
+		return timeZone;
+	}
+
+	public void setTimeZone(TimeZone timeZone) {
+		this.timeZone = timeZone;
+	}
 
 	public TimeZone getTimeZone() {
 		return timeZone;
